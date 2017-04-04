@@ -3,21 +3,29 @@
 
     <!-- Application -->
     <string name="app_version">1.0RC7</string>
-    <string name="app_name">RESTfulContacts</string>
+    <string name="app_name">RESTfulSprites</string>
 
     <!-- Contacts -->
     <string name="contacts_add">New</string>
 
     <!-- Contact Details -->
-    <string name="activity_details">Contact Details</string>
-    <string name="detail_fname_label">First Name:</string>
-    <string name="detail_fname_hint">first name</string>
-    <string name="detail_lname_label">Last Name:</string>
-    <string name="detail_lname_hint">last name</string>
-    <string name="detail_phone_label">Phone:</string>
-    <string name="detail_phone_hint">phone number</string>
-    <string name="detail_email_label">eMail:</string>
-    <string name="detail_email_hint">email address</string>
+    <string name="activity_details">Sprite Details</string>
+    <string name="detail_id_label">ID:</string>
+    <string name="detail_id_hint">id</string>
+    <string name="detail_color_label">Color</string>
+    <string name="detail_color_hint">color</string>
+    <string name="detail_dx_label">DX</string>
+    <string name="detail_dx_hint">dx</string>
+    <string name="detail_dy_label">DY</string>
+    <string name="detail_dy_hint">dy</string>
+    <string name="detail_y_label">Y</string>
+    <string name="detail_y_hint">y</string>
+    <string name="detail_x_label">X</string>
+    <string name="detail_x_hint">x</string>
+    <string name="detail_panelheight_label">Panel Height</string>
+    <string name="detail_panelheight_hint">panel height</string>
+    <string name="detail_panelwidth_label">Panel Width</string>
+    <string name="detail_panelwidth_hint">panel width</string>
     <string name="detail_update">Submit</string>
     <string name="detail_delete">Delete</string>
     <string name="name_required">A contact must have at least a first name</string>
@@ -30,5 +38,5 @@
     <string name="prefs_url_key">RESTfulContacts.URI</string>
 
     <!-- Provider -->
-    <string name="contacts_authority">com.enterpriseandroid.restfulcontacts.CONTACTS</string>
+    <string name="contacts_authority">com.enterpriseandroid.restfulsprites.SPRITES</string>
 </resources>

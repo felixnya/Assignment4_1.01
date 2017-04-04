@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.robertjackson.assignment4.data.SpritesContract;
 
@@ -21,27 +20,39 @@ import com.example.robertjackson.assignment4.data.SpritesContract;
 public class SpritesDetailActivity extends BaseActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    public static final String KEY_URI = "ContactDetailActivity.CONTACT_URI";
+    public static final String KEY_URI = "SpriteDetailActivity.SPRITE_URI";
 
     private static final int LOADER_ID = 58;
 
     private static final String[] PROJ = new String[] {
+            // values taken from SpritesContract.java
             SpritesContract.Columns.ID,
-            SpritesContract.Columns.FNAME,
-            SpritesContract.Columns.LNAME,
-            SpritesContract.Columns.PHONE,
-            SpritesContract.Columns.EMAIL,
+            SpritesContract.Columns.COLOR,
+            SpritesContract.Columns.DX,
+            SpritesContract.Columns.DY,
+            SpritesContract.Columns.PANEL_HEIGHT,
+            SpritesContract.Columns.PANEL_WIDTH,
+            SpritesContract.Columns.X,
+            SpritesContract.Columns.Y,
             SpritesContract.Columns.STATUS
     };
     private View statusView;
-    private TextView fnameView;
-    private String fname = "";
-    private TextView lnameView;
-    private String lname = "";
-    private TextView phoneView;
-    private String phone = "";
-    private TextView emailView;
-    private String email = "";
+    private TextView idView;
+    private String id = "";
+    private TextView colorView;
+    private String color = "";
+    private TextView dxView;
+    private String dx = "";
+    private TextView dyView;
+    private String dy = "";
+    private TextView panelheightView;
+    private String panelheight = "";
+    private TextView panelwidthView;
+    private String panelwidth = "";
+    private TextView xView;
+    private String x = "";
+    private TextView yView;
+    private String y = "";
     private Uri contactUri;
 
     @Override
@@ -72,10 +83,14 @@ public class SpritesDetailActivity extends BaseActivity
         setContentView(R.layout.activity_sprite_details);
 
         statusView = findViewById(R.id.activity_detail_status);
-        fnameView = (TextView) findViewById(R.id.activity_detail_fname);
-        lnameView = (TextView) findViewById(R.id.activity_detail_lname);
-        phoneView = (TextView) findViewById(R.id.activity_detail_phone);
-        emailView = (TextView) findViewById(R.id.activity_detail_email);
+        idView = (TextView) findViewById(R.id.activity_detail_id);
+        colorView = (TextView) findViewById(R.id.activity_detail_color);
+        dxView = (TextView) findViewById(R.id.activity_detail_dx);
+        dyView = (TextView) findViewById(R.id.activity_detail_dy);
+        panelheightView = (TextView) findViewById(R.id.activity_detail_panelheight);
+        panelwidthView = (TextView) findViewById(R.id.activity_detail_panelwidth);
+        xView = (TextView) findViewById(R.id.activity_detail_x);
+        yView = (TextView) findViewById(R.id.activity_detail_y);
 
         findViewById(R.id.activity_detail_update).setOnClickListener(
             new View.OnClickListener() {
@@ -97,31 +112,24 @@ public class SpritesDetailActivity extends BaseActivity
 
     void delete() {
         if (null != contactUri) {
-            new DeleteContact(getContentResolver()).execute(contactUri);
+            new DeleteSprite(getContentResolver()).execute(contactUri);
         }
-        goToContacts();
+        goToSprites();
     }
 
     void update() {
-        String s = fnameView.getText().toString();
-        if (TextUtils.isEmpty(s)) {
-            Toast.makeText(
-                this,
-                R.string.name_required,
-                Toast.LENGTH_SHORT)
-                .show();
-            return;
-        }
 
         ContentValues vals = new ContentValues();
-        addString(fnameView, fname, vals, SpritesContract.Columns.FNAME);
-        addString(lnameView, lname, vals, SpritesContract.Columns.LNAME);
-        addString(phoneView, phone, vals, SpritesContract.Columns.PHONE);
-        addString(emailView, email, vals, SpritesContract.Columns.EMAIL);
-
-        new UpdateContact(getContentResolver(), vals).execute(contactUri);
-
-        goToContacts();
+        addString(idView, id, vals, SpritesContract.Columns.ID);
+        addString(colorView, color, vals, SpritesContract.Columns.COLOR);
+        addString(dxView, dx, vals, SpritesContract.Columns.DX);
+        addString(dyView, dy, vals, SpritesContract.Columns.DY);
+        addString(panelheightView, panelheight, vals, SpritesContract.Columns.PANEL_HEIGHT);
+        addString(panelwidthView, panelwidth, vals, SpritesContract.Columns.PANEL_WIDTH);
+        addString(xView, x, vals, SpritesContract.Columns.X);
+        addString(yView, y, vals, SpritesContract.Columns.Y);
+        new UpdateSprite(getContentResolver(), vals).execute(contactUri);
+        goToSprites();
     }
 
     private void populateView(Cursor c) {
@@ -132,21 +140,34 @@ public class SpritesDetailActivity extends BaseActivity
             statusView);
 
         String s;
-        s = getString(c, SpritesContract.Columns.FNAME);
-        fname = (TextUtils.isEmpty(s)) ? "" : s;
-        fnameView.setText(fname);
-        s = getString(c, SpritesContract.Columns.LNAME);
-        lname = (TextUtils.isEmpty(s)) ? "" : s;
-        lnameView.setText(lname);
-        s = getString(c, SpritesContract.Columns.PHONE);
-        phone = (TextUtils.isEmpty(s)) ? "" : s;
-        phoneView.setText(phone);
-        s = getString(c, SpritesContract.Columns.EMAIL);
-        email = (TextUtils.isEmpty(s)) ? "" : s;
-        emailView.setText(email);
+
+        s = getString(c, SpritesContract.Columns.ID);
+        id = (TextUtils.isEmpty(s)) ? "" : s;
+        idView.setText(id);
+        s = getString(c, SpritesContract.Columns.COLOR);
+        color = (TextUtils.isEmpty(s)) ? "" : s;
+        colorView.setText(color);
+        s = getString(c, SpritesContract.Columns.DX);
+        dx = (TextUtils.isEmpty(s)) ? "" : s;
+        dxView.setText(dx);
+        s = getString(c, SpritesContract.Columns.DY);
+        dy = (TextUtils.isEmpty(s)) ? "" : s;
+        dyView.setText(dy);
+        s = getString(c, SpritesContract.Columns.PANEL_HEIGHT);
+        panelheight = (TextUtils.isEmpty(s)) ? "" : s;
+        panelheightView.setText(panelheight);
+        s = getString(c, SpritesContract.Columns.PANEL_HEIGHT);
+        panelwidth = (TextUtils.isEmpty(s)) ? "" : s;
+        panelwidthView.setText(panelwidth);
+        s = getString(c, SpritesContract.Columns.X);
+        x = (TextUtils.isEmpty(s)) ? "" : s;
+        xView.setText(x);
+        s = getString(c, SpritesContract.Columns.Y);
+        y = (TextUtils.isEmpty(s)) ? "" : s;
+        yView.setText(y);
     }
 
-    private void goToContacts() {
+    private void goToSprites() {
         Intent intent = new Intent(this, SpritesActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
@@ -166,11 +187,11 @@ public class SpritesDetailActivity extends BaseActivity
         if (!oldVal.equals(s)) { vals.put(col, s); }
     }
 
-    static class UpdateContact extends AsyncTask<Uri, Void, Void> {
+    static class UpdateSprite extends AsyncTask<Uri, Void, Void> {
         private final ContentResolver resolver;
         private final ContentValues vals;
 
-        public UpdateContact(ContentResolver resolver, ContentValues vals) {
+        public UpdateSprite(ContentResolver resolver, ContentValues vals) {
             this.resolver = resolver;
             this.vals = vals;
         }
@@ -187,10 +208,10 @@ public class SpritesDetailActivity extends BaseActivity
         }
     }
 
-    static class DeleteContact extends AsyncTask<Uri, Void, Void> {
+    static class DeleteSprite extends AsyncTask<Uri, Void, Void> {
         private final ContentResolver resolver;
 
-        public DeleteContact(ContentResolver resolver) {
+        public DeleteSprite(ContentResolver resolver) {
             this.resolver = resolver;
         }
 

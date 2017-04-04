@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+
     <TextView
         android:id="@+id/activity_detail_status"
         android:layout_width="match_parent"
@@ -12,89 +13,166 @@
         android:textIsSelectable="false" />
 
     <TextView
-        android:id="@+id/activity_detail_fname_label"
+        android:id="@+id/activity_detail_id_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/activity_detail_status"
-        android:text="@string/detail_fname_label"
+        android:text="@string/detail_id_label"
         android:textSize="24sp"
         android:textStyle="bold" />
-
     <EditText
-        android:id="@+id/activity_detail_fname"
+        android:id="@+id/activity_detail_id"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/activity_detail_fname_label"
-        android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@+id/activity_detail_fname_label"
-        android:hint="@string/detail_fname_hint"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/activity_detail_lname_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/activity_detail_fname_label"
-        android:text="@string/detail_lname_label"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/activity_detail_lname"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/activity_detail_lname_label"
+        android:layout_alignBaseline="@+id/activity_detail_id_label"
         android:layout_marginLeft="8dip"
-        android:layout_toRightOf="@+id/activity_detail_lname_label"
-        android:hint="@string/detail_lname_hint"
+        android:layout_toRightOf="@+id/activity_detail_id_label"
+        android:hint="@string/detail_id_hint"
         android:textSize="18sp" />
-
+    <!-- dx -->
     <TextView
-        android:id="@+id/activity_detail_phone_label"
+        android:id="@+id/activity_detail_dx_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/activity_detail_lname_label"
-        android:layout_marginTop="4dip"
-        android:text="@string/detail_phone_label"
+        android:layout_below="@id/activity_detail_id_label"
+        android:text="@string/detail_dx_label"
         android:textSize="24sp"
         android:textStyle="bold" />
-
     <EditText
-        android:id="@+id/activity_detail_phone"
+        android:id="@+id/activity_detail_dx"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/activity_detail_phone_label"
+        android:layout_alignBaseline="@+id/activity_detail_dx_label"
+        android:layout_marginLeft="8dip"
+        android:layout_toRightOf="@+id/activity_detail_dx_label"
+        android:hint="@string/detail_dx_hint"
+        android:textSize="18sp" />
+    <!-- dy -->
+    <TextView
+        android:id="@+id/activity_detail_dy_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/activity_detail_dx_label"
+        android:layout_marginTop="4dip"
+        android:text="@string/detail_dy_label"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+    <EditText
+        android:id="@+id/activity_detail_dy"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/activity_detail_dy_label"
         android:layout_marginLeft="4dip"
-        android:layout_toRightOf="@+id/activity_detail_phone_label"
-        android:hint="@string/detail_phone_hint"
+        android:layout_toRightOf="@+id/activity_detail_dy_label"
+        android:hint="@string/detail_dy_hint"
         android:inputType="phone"
         android:textSize="18sp" />
-
+    <!-- panelheight -->
     <TextView
-        android:id="@+id/activity_detail_email_label"
+        android:id="@+id/activity_detail_panelheight_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/activity_detail_phone_label"
+        android:layout_below="@+id/activity_detail_dy_label"
         android:layout_marginTop="6dip"
-        android:text="@string/detail_email_label"
+        android:text="@string/detail_panelheight_label"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+    <EditText
+        android:id="@+id/activity_detail_panelheight"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/activity_detail_panelheight_label"
+        android:layout_marginLeft="4dip"
+        android:layout_toRightOf="@id/activity_detail_panelheight_label"
+        android:hint="@string/detail_panelheight_hint"
+        android:textSize="18sp" />
+    <!-- panelwidth -->
+    <TextView
+        android:id="@+id/activity_detail_panelwidth_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_detail_panelheight_label"
+        android:layout_marginTop="6dip"
+        android:text="@string/detail_panelwidth_label"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/activity_detail_email"
+        android:id="@+id/activity_detail_panelwidth"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/activity_detail_email_label"
+        android:layout_alignBaseline="@id/activity_detail_panelwidth_label"
         android:layout_marginLeft="4dip"
-        android:layout_toRightOf="@id/activity_detail_email_label"
-        android:hint="@string/detail_email_hint"
-        android:inputType="textEmailAddress"
+        android:layout_toRightOf="@id/activity_detail_panelwidth_label"
+        android:hint="@string/detail_panelwidth_hint"
         android:textSize="18sp" />
+    <!-- x -->
+    <TextView
+        android:id="@+id/activity_detail_x_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_detail_panelwidth_label"
+        android:layout_marginTop="6dip"
+        android:text="@string/detail_x_label"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/activity_detail_x"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/activity_detail_x_label"
+        android:layout_marginLeft="4dip"
+        android:layout_toRightOf="@id/activity_detail_x_label"
+        android:hint="@string/detail_x_hint"
+        android:textSize="18sp" />
+    <!-- y -->
+    <TextView
+        android:id="@+id/activity_detail_y_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_detail_x_label"
+        android:layout_marginTop="6dip"
+        android:text="@string/detail_y_label"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/activity_detail_y"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/activity_detail_y_label"
+        android:layout_marginLeft="4dip"
+        android:layout_toRightOf="@id/activity_detail_y_label"
+        android:hint="@string/detail_y_hint"
+        android:textSize="18sp" />
+    <!-- color -->
+    <TextView
+        android:id="@+id/activity_detail_color_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/activity_detail_y_label"
+        android:text="@string/detail_color_label"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/activity_detail_color"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/activity_detail_color_label"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/activity_detail_color_label"
+        android:text="java.awt.Color[r=0,g=0,b=255]"
+        android:textSize="18sp" />
     <Button
         android:id="@+id/activity_detail_update"
         android:layout_width="wrap_content"
@@ -102,7 +180,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/detail_update" />
-
     <Button
         android:id="@+id/activity_detail_delete"
         android:layout_width="wrap_content"

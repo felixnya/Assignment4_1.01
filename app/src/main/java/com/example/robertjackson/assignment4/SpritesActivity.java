@@ -19,26 +19,25 @@ import com.example.robertjackson.assignment4.data.SpritesContract;
 public class SpritesActivity extends BaseActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private static final String TAG = "CONTACTS";
+    private static final String TAG = "SPRITES";
 
     private static final int LOADER_ID = 42;
 
     private static final String[] PROJ = new String[] {
             SpritesContract.Columns.ID,
-            SpritesContract.Columns.FNAME,
-            SpritesContract.Columns.LNAME,
-            SpritesContract.Columns.PHONE,
-            SpritesContract.Columns.EMAIL,
+            SpritesContract.Columns.DX,
+            SpritesContract.Columns.DY,
+            SpritesContract.Columns.PANEL_HEIGHT,
+            SpritesContract.Columns.PANEL_WIDTH,
+            SpritesContract.Columns.X,
+            SpritesContract.Columns.Y,
             SpritesContract.Columns.STATUS
     };
 
     private static final String[] FROM = new String[PROJ.length - 1];
     private static final int[] TO = new int[] {
-        R.id.row_contacts_fname,
-        R.id.row_contacts_lname,
-        R.id.row_contacts_phone,
-        R.id.row_contacts_email,
-        R.id.row_contacts_status
+            R.id.row_sprites_dx,
+            R.id.row_sprites_status
     };
 
     static {
@@ -55,7 +54,7 @@ public class SpritesActivity extends BaseActivity
             PROJ,
             null,
             null,
-                SpritesContract.Columns.FNAME + " ASC");
+                SpritesContract.Columns.DX + " ASC");
     }
 
     @Override
@@ -73,7 +72,7 @@ public class SpritesActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sprites);
 
-        findViewById(R.id.activity_contacts_add).setOnClickListener(
+        findViewById(R.id.activity_sprites_add).setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,7 +89,7 @@ public class SpritesActivity extends BaseActivity
         listAdapter.setViewBinder(new StatusBinder());
 
         ListView listView
-            = ((ListView) findViewById(R.id.activity_contacts_list));
+                = ((ListView) findViewById(R.id.activity_sprites_list));
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,7 +126,7 @@ public class SpritesActivity extends BaseActivity
 
         @Override
         public boolean setViewValue(View view, Cursor cursor, int idx) {
-            if (view.getId() != R.id.row_contacts_status) {
+            if (view.getId() != R.id.row_sprites_status) {
                 return false;
             }
             setStatusBackground(cursor.getInt(idx), view);
