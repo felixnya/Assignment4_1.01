@@ -11,7 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.robertjackson.assignment4.data.ContactsContract;
+import com.example.robertjackson.assignment4.data.SpritesContract;
 
 
 @SuppressLint("Registered")
@@ -21,9 +21,9 @@ public class BaseActivity extends Activity {
     private static final SparseIntArray STATUS_COLOR_MAP;
     static {
         SparseIntArray a = new SparseIntArray();
-        a.put(ContactsContract.STATUS_OK, Color.GREEN);
-        a.put(ContactsContract.STATUS_SYNC, Color.YELLOW);
-        a.put(ContactsContract.STATUS_DIRTY, Color.RED);
+        a.put(SpritesContract.STATUS_OK, Color.GREEN);
+        a.put(SpritesContract.STATUS_SYNC, Color.YELLOW);
+        a.put(SpritesContract.STATUS_DIRTY, Color.RED);
         STATUS_COLOR_MAP = a;
     }
 

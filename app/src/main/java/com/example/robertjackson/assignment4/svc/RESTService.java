@@ -1,5 +1,20 @@
 package com.example.robertjackson.assignment4.svc;
 
+import android.app.IntentService;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.example.robertjackson.assignment4.BuildConfig;
+import com.example.robertjackson.assignment4.R;
+import com.example.robertjackson.assignment4.SpritesApplication;
+import com.example.robertjackson.assignment4.data.SpritesContract;
+import com.example.robertjackson.assignment4.data.SpritesHelper;
+import com.example.robertjackson.assignment4.data.SpritesProvider;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,27 +25,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
 
-import android.app.IntentService;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-
-import com.example.robertjackson.assignment4.BuildConfig;
-import com.example.robertjackson.assignment4.ContactsApplication;
-import com.example.robertjackson.assignment4.R;
-import com.example.robertjackson.assignment4.data.ContactsContract;
-import com.example.robertjackson.assignment4.data.ContactsHelper;
-import com.example.robertjackson.assignment4.data.ContactsProvider;
-
 
 public class RESTService extends IntentService {
-    private static final String TAG = "REST";
-
-    // odd that these aren't defined elsewhere...
-    public static enum HttpMethod { GET, PUT, POST, DELETE; }
     public static final String HEADER_ENCODING = "Accept-Encoding";
     public static final String HEADER_USER_AGENT = "User-Agent";
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
@@ -38,32 +34,21 @@ public class RESTService extends IntentService {
     public static final String MIME_ANY = "*/*";
     public static final String MIME_JSON = "application/json;charset=UTF-8";
     public static final String ENCODING_NONE = "identity";
-
     public static final int HTTP_READ_TIMEOUT = 30 * 1000; // ms
     public static final int HTTP_CONN_TIMEOUT = 30 * 1000; // ms
-
-    public static enum Op {
-        NOOP, CREATE, UPDATE, DELETE;
-
-        static Op toOp(int code) {
-            Op[] ops = Op.values();
-            code = (code * -1) - 1;
-            return ((0 > code) || (ops.length <= code))
-                ? NOOP
-                : ops[code];
-        }
-        int toInt() { return (ordinal() + 1) * -1; }
-    }
-
     public static final String XACT = "RESTService.XACT";
     public static final String ID = "RESTService.ID";
     public static final String FNAME = "RESTService.FNAME";
     public static final String LNAME = "RESTService.LNAME";
     public static final String PHONE = "RESTService.PHONE";
     public static final String EMAIL = "RESTService.EMAIL";
-
+    private static final String TAG = "REST";
     private static final String OP = "RESTService.OP";
+    private String USER_AGENT;
 
+    public RESTService() {
+        super(TAG);
+    }
 
     public static String insert(Context ctxt, ContentValues vals) {
         Intent intent = getIntent(ctxt, RESTService.Op.CREATE);
@@ -115,30 +100,21 @@ public class RESTService extends IntentService {
     private static void marshalRequest(ContentValues vals, Intent intent) {
         intent.putExtra(
             RESTService.FNAME,
-            (!vals.containsKey(ContactsHelper.COL_FNAME))
-                ? "" : vals.getAsString(ContactsHelper.COL_FNAME));
+                (!vals.containsKey(SpritesHelper.COL_FNAME))
+                        ? "" : vals.getAsString(SpritesHelper.COL_FNAME));
         intent.putExtra(
             RESTService.LNAME,
-            (!vals.containsKey(ContactsHelper.COL_LNAME))
-                ? "" : vals.getAsString(ContactsHelper.COL_LNAME));
+                (!vals.containsKey(SpritesHelper.COL_LNAME))
+                        ? "" : vals.getAsString(SpritesHelper.COL_LNAME));
         intent.putExtra(
             RESTService.PHONE,
-            (!vals.containsKey(ContactsHelper.COL_PHONE))
-                ? "" : vals.getAsString(ContactsHelper.COL_PHONE));
+                (!vals.containsKey(SpritesHelper.COL_PHONE))
+                        ? "" : vals.getAsString(SpritesHelper.COL_PHONE));
         intent.putExtra(
             RESTService.EMAIL,
-            (!vals.containsKey(ContactsHelper.COL_EMAIL))
-                ? "" : vals.getAsString(ContactsHelper.COL_EMAIL));
+                (!vals.containsKey(SpritesHelper.COL_EMAIL))
+                        ? "" : vals.getAsString(SpritesHelper.COL_EMAIL));
     }
-
-    private static interface ResponseHandler {
-        void handleResponse(BufferedReader in) throws IOException;
-    }
-
-
-    private String USER_AGENT;
-
-    public RESTService() { super(TAG); }
 
     @Override
     public void onCreate() {
@@ -146,8 +122,6 @@ public class RESTService extends IntentService {
         USER_AGENT = getString(R.string.app_name)
             + "/" + getString(R.string.app_version);
     }
-
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -181,7 +155,7 @@ public class RESTService extends IntentService {
         if (args.containsKey(ID)) {
             throw new IllegalArgumentException("create must not specify id");
         }
-        Uri uri = ((ContactsApplication) getApplication()).getApiUri();
+        Uri uri = ((SpritesApplication) getApplication()).getApiUri();
 
         final ContentValues vals = new ContentValues();
         try {
@@ -199,7 +173,7 @@ public class RESTService extends IntentService {
                         new MessageHandler().unmarshal(in, vals);
                     } });
 
-            vals.putNull(ContactsContract.Columns.DIRTY);
+            vals.putNull(SpritesContract.Columns.DIRTY);
         }
         catch (Exception e) {
             Log.w(TAG, "create failed: " + e, e);
@@ -214,7 +188,7 @@ public class RESTService extends IntentService {
             throw new IllegalArgumentException("missing id in update");
         }
 
-        Uri uri = ((ContactsApplication) getApplication()).getApiUri()
+        Uri uri = ((SpritesApplication) getApplication()).getApiUri()
             .buildUpon().appendPath(args.getString(ID)).build();
 
         final ContentValues vals = new ContentValues();
@@ -234,7 +208,7 @@ public class RESTService extends IntentService {
                     } });
 
             checkId(args, vals);
-            vals.putNull(ContactsContract.Columns.DIRTY);
+            vals.putNull(SpritesContract.Columns.DIRTY);
         }
         catch (Exception e) {
             Log.w(TAG, "update failed: " + e);
@@ -248,7 +222,7 @@ public class RESTService extends IntentService {
         if (!args.containsKey(ID)) {
             throw new IllegalArgumentException("missing id in delete");
         }
-        Uri uri = ((ContactsApplication) getApplication()).getApiUri()
+        Uri uri = ((SpritesApplication) getApplication()).getApiUri()
             .buildUpon().appendPath(args.getString(ID)).build();
 
         try { sendRequest(HttpMethod.DELETE, uri, null, null); }
@@ -265,15 +239,15 @@ public class RESTService extends IntentService {
         // Using the transaction id to identify the record needing update
         // causes a data race if there is more than one update in progress
         getContentResolver().delete(
-            ContactsContract.URI,
-            ContactsProvider.SYNC_CONSTRAINT,
+                SpritesContract.URI,
+                SpritesProvider.SYNC_CONSTRAINT,
             new String[] { args.getString(XACT) });
     }
 
     private void cleanup(Bundle args, ContentValues vals) {
         if (null == vals) { vals = new ContentValues(); }
 
-        vals.putNull(ContactsContract.Columns.SYNC);
+        vals.putNull(SpritesContract.Columns.SYNC);
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "cleanup @" + args.getString(XACT) + ": " + vals);
         }
@@ -281,14 +255,14 @@ public class RESTService extends IntentService {
         String sel;
         String[] selArgs;
         if (!args.containsKey(ID)) {
-            sel = ContactsProvider.SYNC_CONSTRAINT;
+            sel = SpritesProvider.SYNC_CONSTRAINT;
             selArgs = new String[] { args.getString(XACT) };
         }
         else {
             sel = new StringBuilder("(")
-                .append(ContactsProvider.SYNC_CONSTRAINT)
+                    .append(SpritesProvider.SYNC_CONSTRAINT)
                 .append(") AND (")
-                .append(ContactsProvider.REMOTE_ID_CONSTRAINT)
+                    .append(SpritesProvider.REMOTE_ID_CONSTRAINT)
                 .append(")")
                 .toString();
             selArgs = new String[] { args.getString(XACT), args.getString(XACT) };
@@ -297,16 +271,16 @@ public class RESTService extends IntentService {
         // !!!
         // Using the transaction id to identify the record needing update
         // causes a data race if there is more than one update in progress
-        getContentResolver().update(ContactsContract.URI, vals, sel, selArgs);
+        getContentResolver().update(SpritesContract.URI, vals, sel, selArgs);
     }
 
     private void checkId(Bundle args, ContentValues vals) {
         String id = args.getString(ID);
-        String rid = vals.getAsString(ContactsContract.Columns.REMOTE_ID);
+        String rid = vals.getAsString(SpritesContract.Columns.REMOTE_ID);
         if (!id.equals(rid)) {
             Log.w(TAG, "request id does not match response id: " + id + ", " + rid);
         }
-        vals.remove(ContactsContract.Columns.REMOTE_ID);
+        vals.remove(SpritesContract.Columns.REMOTE_ID);
     }
 
     // the return code is being ignored, at present
@@ -363,5 +337,30 @@ public class RESTService extends IntentService {
         }
 
         return code;
+        }
+
+    // odd that these aren't defined elsewhere...
+    public enum HttpMethod {
+        GET, PUT, POST, DELETE
+    }
+
+    public enum Op {
+        NOOP, CREATE, UPDATE, DELETE;
+
+        static Op toOp(int code) {
+            Op[] ops = Op.values();
+            code = (code * -1) - 1;
+            return ((0 > code) || (ops.length <= code))
+                    ? NOOP
+                    : ops[code];
+        }
+
+        int toInt() {
+            return (ordinal() + 1) * -1;
+        }
+    }
+
+    private interface ResponseHandler {
+        void handleResponse(BufferedReader in) throws IOException;
     }
 }

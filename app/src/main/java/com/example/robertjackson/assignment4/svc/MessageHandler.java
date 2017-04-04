@@ -1,32 +1,32 @@
 package com.example.robertjackson.assignment4.svc;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.example.robertjackson.assignment4.data.SpritesContract;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.robertjackson.assignment4.data.ContactsContract;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MessageHandler {
-    private static final String TAG = "JSON";
-
     public static final String TAG_FNAME = "firstname";
     public static final String TAG_LNAME = "lastname";
     public static final String TAG_PHONE = "homephone";
     public static final String TAG_EMAIL = "email";
     public static final String TAG_LOCATION = "location";
-
+    private static final String TAG = "JSON";
     private static final Map<String, String> MARSHAL_TAB;
+    private static final Map<String, String> UNMARSHAL_TAB;
+
     static {
         Map<String, String> m = new HashMap<String, String>();
         m.put(RESTService.FNAME, TAG_FNAME);
@@ -36,14 +36,13 @@ public class MessageHandler {
         MARSHAL_TAB = m;
     }
 
-    private static final Map<String, String> UNMARSHAL_TAB;
     static {
         Map<String, String> m = new HashMap<String, String>();
-        m.put(TAG_FNAME, ContactsContract.Columns.FNAME);
-        m.put(TAG_LNAME, ContactsContract.Columns.LNAME);
-        m.put(TAG_PHONE, ContactsContract.Columns.PHONE);
-        m.put(TAG_EMAIL, ContactsContract.Columns.EMAIL);
-        m.put(TAG_LOCATION, ContactsContract.Columns.REMOTE_ID);
+        m.put(TAG_FNAME, SpritesContract.Columns.FNAME);
+        m.put(TAG_LNAME, SpritesContract.Columns.LNAME);
+        m.put(TAG_PHONE, SpritesContract.Columns.PHONE);
+        m.put(TAG_EMAIL, SpritesContract.Columns.EMAIL);
+        m.put(TAG_LOCATION, SpritesContract.Columns.REMOTE_ID);
         UNMARSHAL_TAB = m;
     }
 

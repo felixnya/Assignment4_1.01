@@ -10,15 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.example.robertjackson.assignment4.data.ContactsContract;
+import com.example.robertjackson.assignment4.data.SpritesContract;
 
 
-
-public class ContactsActivity extends BaseActivity
+public class SpritesActivity extends BaseActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
 {
     private static final String TAG = "CONTACTS";
@@ -26,17 +24,15 @@ public class ContactsActivity extends BaseActivity
     private static final int LOADER_ID = 42;
 
     private static final String[] PROJ = new String[] {
-        ContactsContract.Columns.ID,
-        ContactsContract.Columns.FNAME,
-        ContactsContract.Columns.LNAME,
-        ContactsContract.Columns.PHONE,
-        ContactsContract.Columns.EMAIL,
-        ContactsContract.Columns.STATUS
+            SpritesContract.Columns.ID,
+            SpritesContract.Columns.FNAME,
+            SpritesContract.Columns.LNAME,
+            SpritesContract.Columns.PHONE,
+            SpritesContract.Columns.EMAIL,
+            SpritesContract.Columns.STATUS
     };
 
     private static final String[] FROM = new String[PROJ.length - 1];
-    static { System.arraycopy(PROJ, 1, FROM, 0, FROM.length); }
-
     private static final int[] TO = new int[] {
         R.id.row_contacts_fname,
         R.id.row_contacts_lname,
@@ -45,19 +41,9 @@ public class ContactsActivity extends BaseActivity
         R.id.row_contacts_status
     };
 
-    private static class StatusBinder
-        implements SimpleCursorAdapter.ViewBinder
-    {
-        public StatusBinder() { }
-
-        @Override
-        public boolean setViewValue(View view, Cursor cursor, int idx) {
-            if (view.getId() != R.id.row_contacts_status) { return false; }
-            setStatusBackground(cursor.getInt(idx), view);
-            return true;
-        }
+    static {
+        System.arraycopy(PROJ, 1, FROM, 0, FROM.length);
     }
-
 
     private SimpleCursorAdapter listAdapter;
 
@@ -65,11 +51,11 @@ public class ContactsActivity extends BaseActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
             this,
-            ContactsContract.URI,
+                SpritesContract.URI,
             PROJ,
             null,
             null,
-            ContactsContract.Columns.FNAME + " ASC");
+                SpritesContract.Columns.FNAME + " ASC");
     }
 
     @Override
@@ -85,9 +71,9 @@ public class ContactsActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_sprites);
 
-        ((Button) findViewById(R.id.activity_contacts_add)).setOnClickListener(
+        findViewById(R.id.activity_contacts_add).setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,7 +82,7 @@ public class ContactsActivity extends BaseActivity
 
         listAdapter = new SimpleCursorAdapter(
             this,
-            R.layout.contact_row,
+                R.layout.sprite_row,
             null,
             FROM,
             TO,
@@ -118,19 +104,34 @@ public class ContactsActivity extends BaseActivity
 
     void showDetails(int pos) {
         Cursor c = (Cursor) listAdapter.getItem(pos);
-        showDetails(ContactsContract.URI.buildUpon()
+        showDetails(SpritesContract.URI.buildUpon()
             .appendPath(
-                c.getString(c.getColumnIndex(ContactsContract.Columns.ID)))
+                    c.getString(c.getColumnIndex(SpritesContract.Columns.ID)))
             .build());
     }
 
     void showDetails(Uri uri) {
         if (BuildConfig.DEBUG) { Log.d(TAG, "adding contact"); }
         Intent intent = new Intent();
-        intent.setClass(this, ContactDetailActivity.class);
+        intent.setClass(this, SpritesDetailActivity.class);
         if (null != uri) {
-            intent.putExtra(ContactDetailActivity.KEY_URI, uri.toString());
+            intent.putExtra(SpritesDetailActivity.KEY_URI, uri.toString());
         }
         startActivity(intent);
+    }
+
+    private static class StatusBinder
+            implements SimpleCursorAdapter.ViewBinder {
+        public StatusBinder() {
+        }
+
+        @Override
+        public boolean setViewValue(View view, Cursor cursor, int idx) {
+            if (view.getId() != R.id.row_contacts_status) {
+                return false;
+            }
+            setStatusBackground(cursor.getInt(idx), view);
+            return true;
+        }
     }
 }

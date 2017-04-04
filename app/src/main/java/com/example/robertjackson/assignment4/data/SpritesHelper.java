@@ -6,22 +6,17 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class ContactsHelper extends SQLiteOpenHelper {
-    static final int VERSION = 2;
-
-    static final String DB_FILE = "contacts.db";
-
-    static final String TAB_CONTACTS = "contacts";
-
-    // pk
-    static final String COL_ID = "id";                   // long
-
+public class SpritesHelper extends SQLiteOpenHelper {
     // contact data
     public static final String COL_FNAME = "firstName";  // string
     public static final String COL_LNAME = "lastName";   // string
     public static final String COL_PHONE = "phone";      // string
     public static final String COL_EMAIL = "email";      // string
-
+    static final int VERSION = 2;
+    static final String DB_FILE = "contacts.db";
+    static final String TAB_CONTACTS = "contacts";
+    // pk
+    static final String COL_ID = "id";                   // long
     // meta-data
     static final String COL_REMOTE_ID = "remoteId";      // string
     static final String COL_DELETED = "deleted";         // boolean (null or MARK)
@@ -29,7 +24,7 @@ public class ContactsHelper extends SQLiteOpenHelper {
     static final String COL_SYNC = "sync";               // string
 
 
-    public ContactsHelper(Context context) {
+    public SpritesHelper(Context context) {
         super(context, DB_FILE, null, VERSION);
     }
 

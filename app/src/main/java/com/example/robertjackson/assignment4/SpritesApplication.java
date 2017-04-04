@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class ContactsApplication extends Application
+public class SpritesApplication extends Application
     implements SharedPreferences.OnSharedPreferenceChangeListener
 {
     private static final String TAG = "APP";
@@ -43,7 +43,7 @@ public class ContactsApplication extends Application
     private String keyApiRoot;
     private Uri apiRootUri;
 
-    public ContactsApplication() {
+    public SpritesApplication() {
         /**
          * Disable the persistent connection since We cannot get it work using HttpURLConnection.
          */

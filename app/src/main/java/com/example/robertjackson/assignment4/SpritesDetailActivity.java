@@ -1,13 +1,5 @@
 package com.example.robertjackson.assignment4;
 
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -15,10 +7,18 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import com.example.robertjackson.assignment4.data.ContactsContract;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.robertjackson.assignment4.data.SpritesContract;
 
 
-public class ContactDetailActivity extends BaseActivity
+public class SpritesDetailActivity extends BaseActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
 {
     public static final String KEY_URI = "ContactDetailActivity.CONTACT_URI";
@@ -26,46 +26,13 @@ public class ContactDetailActivity extends BaseActivity
     private static final int LOADER_ID = 58;
 
     private static final String[] PROJ = new String[] {
-        ContactsContract.Columns.ID,
-        ContactsContract.Columns.FNAME,
-        ContactsContract.Columns.LNAME,
-        ContactsContract.Columns.PHONE,
-        ContactsContract.Columns.EMAIL,
-        ContactsContract.Columns.STATUS
+            SpritesContract.Columns.ID,
+            SpritesContract.Columns.FNAME,
+            SpritesContract.Columns.LNAME,
+            SpritesContract.Columns.PHONE,
+            SpritesContract.Columns.EMAIL,
+            SpritesContract.Columns.STATUS
     };
-
-    static class UpdateContact extends AsyncTask<Uri, Void, Void> {
-        private final ContentResolver resolver;
-        private final ContentValues vals;
-
-        public UpdateContact(ContentResolver resolver, ContentValues vals) {
-            this.resolver = resolver;
-            this.vals = vals;
-        }
-
-        @Override
-        protected Void doInBackground(Uri... args) {
-            Uri uri = args[0];
-            if (null != uri) { resolver.update(uri, vals, null, null); }
-            else { resolver.insert(ContactsContract.URI, vals); }
-            return null;
-        }
-    }
-
-    static class DeleteContact extends AsyncTask<Uri, Void, Void> {
-        private final ContentResolver resolver;
-
-        public DeleteContact(ContentResolver resolver) {
-            this.resolver = resolver;
-        }
-
-        @Override
-        protected Void doInBackground(Uri... args) {
-            resolver.delete(args[0], null, null);
-            return null;
-        }
-    }
-
     private View statusView;
     private TextView fnameView;
     private String fname = "";
@@ -102,7 +69,7 @@ public class ContactDetailActivity extends BaseActivity
             getLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
-        setContentView(R.layout.activity_contact_details);
+        setContentView(R.layout.activity_sprite_details);
 
         statusView = findViewById(R.id.activity_detail_status);
         fnameView = (TextView) findViewById(R.id.activity_detail_fname);
@@ -110,12 +77,12 @@ public class ContactDetailActivity extends BaseActivity
         phoneView = (TextView) findViewById(R.id.activity_detail_phone);
         emailView = (TextView) findViewById(R.id.activity_detail_email);
 
-        ((Button) findViewById(R.id.activity_detail_update)).setOnClickListener(
+        findViewById(R.id.activity_detail_update).setOnClickListener(
             new View.OnClickListener() {
                 @Override public void onClick(View v) { update(); }
             });
 
-        ((Button) findViewById(R.id.activity_detail_delete)).setOnClickListener(
+        findViewById(R.id.activity_detail_delete).setOnClickListener(
             new View.OnClickListener() {
                 @Override public void onClick(View v) { delete( ); }
             });
@@ -147,10 +114,10 @@ public class ContactDetailActivity extends BaseActivity
         }
 
         ContentValues vals = new ContentValues();
-        addString(fnameView, fname, vals, ContactsContract.Columns.FNAME);
-        addString(lnameView, lname, vals, ContactsContract.Columns.LNAME);
-        addString(phoneView, phone, vals, ContactsContract.Columns.PHONE);
-        addString(emailView, email, vals, ContactsContract.Columns.EMAIL);
+        addString(fnameView, fname, vals, SpritesContract.Columns.FNAME);
+        addString(lnameView, lname, vals, SpritesContract.Columns.LNAME);
+        addString(phoneView, phone, vals, SpritesContract.Columns.PHONE);
+        addString(emailView, email, vals, SpritesContract.Columns.EMAIL);
 
         new UpdateContact(getContentResolver(), vals).execute(contactUri);
 
@@ -161,26 +128,26 @@ public class ContactDetailActivity extends BaseActivity
         if (!c.moveToNext()) { return; }
 
         setStatusBackground(
-            c.getInt(c.getColumnIndex(ContactsContract.Columns.STATUS)),
+                c.getInt(c.getColumnIndex(SpritesContract.Columns.STATUS)),
             statusView);
 
         String s;
-        s = getString(c, ContactsContract.Columns.FNAME);
+        s = getString(c, SpritesContract.Columns.FNAME);
         fname = (TextUtils.isEmpty(s)) ? "" : s;
         fnameView.setText(fname);
-        s = getString(c, ContactsContract.Columns.LNAME);
+        s = getString(c, SpritesContract.Columns.LNAME);
         lname = (TextUtils.isEmpty(s)) ? "" : s;
         lnameView.setText(lname);
-        s = getString(c, ContactsContract.Columns.PHONE);
+        s = getString(c, SpritesContract.Columns.PHONE);
         phone = (TextUtils.isEmpty(s)) ? "" : s;
         phoneView.setText(phone);
-        s = getString(c, ContactsContract.Columns.EMAIL);
+        s = getString(c, SpritesContract.Columns.EMAIL);
         email = (TextUtils.isEmpty(s)) ? "" : s;
         emailView.setText(email);
     }
 
     private void goToContacts() {
-        Intent intent = new Intent(this, ContactsActivity.class);
+        Intent intent = new Intent(this, SpritesActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
@@ -197,5 +164,40 @@ public class ContactDetailActivity extends BaseActivity
     {
         String s = view.getText().toString();
         if (!oldVal.equals(s)) { vals.put(col, s); }
+    }
+
+    static class UpdateContact extends AsyncTask<Uri, Void, Void> {
+        private final ContentResolver resolver;
+        private final ContentValues vals;
+
+        public UpdateContact(ContentResolver resolver, ContentValues vals) {
+            this.resolver = resolver;
+            this.vals = vals;
+        }
+
+        @Override
+        protected Void doInBackground(Uri... args) {
+            Uri uri = args[0];
+            if (null != uri) {
+                resolver.update(uri, vals, null, null);
+            } else {
+                resolver.insert(SpritesContract.URI, vals);
+            }
+            return null;
+        }
+    }
+
+    static class DeleteContact extends AsyncTask<Uri, Void, Void> {
+        private final ContentResolver resolver;
+
+        public DeleteContact(ContentResolver resolver) {
+            this.resolver = resolver;
+        }
+
+        @Override
+        protected Void doInBackground(Uri... args) {
+            resolver.delete(args[0], null, null);
+            return null;
+        }
     }
 }

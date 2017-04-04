@@ -11,68 +11,65 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.robertjackson.assignment4.BuildConfig;
+import com.example.robertjackson.assignment4.svc.RESTService;
 import com.example.robertjackson.assignment4.util.ColumnMap;
 import com.example.robertjackson.assignment4.util.ProjectionMap;
 
-import com.example.robertjackson.assignment4.BuildConfig;
-import com.example.robertjackson.assignment4.svc.RESTService;
 
-
-public class ContactsProvider extends ContentProvider {
+public class SpritesProvider extends ContentProvider {
+    public static final String PK_CONSTRAINT = SpritesHelper.COL_ID + "=";
+    public static final String SYNC_CONSTRAINT = SpritesHelper.COL_SYNC + "=?";
+    public static final String REMOTE_ID_CONSTRAINT = SpritesHelper.COL_REMOTE_ID + "=?";
     private static final String TAG = "DB";
-
-    public static final String PK_CONSTRAINT = ContactsHelper.COL_ID + "=";
-    public static final String SYNC_CONSTRAINT = ContactsHelper.COL_SYNC + "=?";
-    public static final String REMOTE_ID_CONSTRAINT = ContactsHelper.COL_REMOTE_ID + "=?";
-
     private static final ProjectionMap PROJ_MAP = new ProjectionMap.Builder()
-        .addColumn(ContactsContract.Columns.ID, ContactsHelper.COL_ID)
-        .addColumn(ContactsContract.Columns.FNAME, ContactsHelper.COL_FNAME)
-        .addColumn(ContactsContract.Columns.LNAME, ContactsHelper.COL_LNAME)
-        .addColumn(ContactsContract.Columns.PHONE, ContactsHelper.COL_PHONE)
-        .addColumn(ContactsContract.Columns.EMAIL, ContactsHelper.COL_EMAIL)
+            .addColumn(SpritesContract.Columns.ID, SpritesHelper.COL_ID)
+            .addColumn(SpritesContract.Columns.FNAME, SpritesHelper.COL_FNAME)
+            .addColumn(SpritesContract.Columns.LNAME, SpritesHelper.COL_LNAME)
+            .addColumn(SpritesContract.Columns.PHONE, SpritesHelper.COL_PHONE)
+            .addColumn(SpritesContract.Columns.EMAIL, SpritesHelper.COL_EMAIL)
         .addColumn(
-            ContactsContract.Columns.STATUS,
+                SpritesContract.Columns.STATUS,
             "CASE"
-                + " WHEN " + ContactsHelper.COL_SYNC + " NOT NULL "
-                    + " THEN " + ContactsContract.STATUS_SYNC
-                + " WHEN " + ContactsHelper.COL_DIRTY + " NOT NULL "
-                    + " THEN " + ContactsContract.STATUS_DIRTY
-                + " ELSE " + ContactsContract.STATUS_OK + " END")
+                    + " WHEN " + SpritesHelper.COL_SYNC + " NOT NULL "
+                    + " THEN " + SpritesContract.STATUS_SYNC
+                    + " WHEN " + SpritesHelper.COL_DIRTY + " NOT NULL "
+                    + " THEN " + SpritesContract.STATUS_DIRTY
+                    + " ELSE " + SpritesContract.STATUS_OK + " END")
         .build();
 
     private static final ColumnMap COL_MAP = new ColumnMap.Builder()
         .addColumn(
-            ContactsContract.Columns.ID,
-            ContactsHelper.COL_ID,
+                SpritesContract.Columns.ID,
+                SpritesHelper.COL_ID,
             ColumnMap.Type.LONG)
         .addColumn(
-            ContactsContract.Columns.FNAME,
-            ContactsHelper.COL_FNAME,
+                SpritesContract.Columns.FNAME,
+                SpritesHelper.COL_FNAME,
             ColumnMap.Type.STRING)
         .addColumn(
-            ContactsContract.Columns.LNAME,
-            ContactsHelper.COL_LNAME,
+                SpritesContract.Columns.LNAME,
+                SpritesHelper.COL_LNAME,
             ColumnMap.Type.STRING)
         .addColumn(
-            ContactsContract.Columns.PHONE,
-            ContactsHelper.COL_PHONE,
+                SpritesContract.Columns.PHONE,
+                SpritesHelper.COL_PHONE,
             ColumnMap.Type.STRING)
         .addColumn(
-            ContactsContract.Columns.EMAIL,
-            ContactsHelper.COL_EMAIL,
+                SpritesContract.Columns.EMAIL,
+                SpritesHelper.COL_EMAIL,
             ColumnMap.Type.STRING)
         .addColumn(
-            ContactsContract.Columns.REMOTE_ID,
-            ContactsHelper.COL_REMOTE_ID,
+                SpritesContract.Columns.REMOTE_ID,
+                SpritesHelper.COL_REMOTE_ID,
             ColumnMap.Type.STRING)
         .addColumn(
-            ContactsContract.Columns.DIRTY,
-            ContactsHelper.COL_DIRTY,
+                SpritesContract.Columns.DIRTY,
+                SpritesHelper.COL_DIRTY,
             ColumnMap.Type.INTEGER)
         .addColumn(
-            ContactsContract.Columns.SYNC,
-            ContactsHelper.COL_SYNC,
+                SpritesContract.Columns.SYNC,
+                SpritesHelper.COL_SYNC,
             ColumnMap.Type.STRING)
         .build();
 
@@ -80,31 +77,29 @@ public class ContactsProvider extends ContentProvider {
     private static final int CONTACTS_ITEM = 2;
 
     private static final UriMatcher uriMatcher;
+    private static final String[] PROJ_REM_ID = new String[]{
+            SpritesHelper.COL_REMOTE_ID,
+    };
+    private static final Integer MARK = Integer.valueOf(1);
+
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(
-            ContactsContract.AUTHORITY,
-            ContactsContract.TABLE,
+                SpritesContract.AUTHORITY,
+                SpritesContract.TABLE,
             CONTACTS_DIR);
         uriMatcher.addURI(
-            ContactsContract.AUTHORITY,
-            ContactsContract.TABLE + "/#",
+                SpritesContract.AUTHORITY,
+                SpritesContract.TABLE + "/#",
             CONTACTS_ITEM);
     }
 
-    private static final String[] PROJ_REM_ID = new String[] {
-        ContactsHelper.COL_REMOTE_ID,
-    };
-
-    private static final Integer MARK = Integer.valueOf(1);
-
-
-    private volatile ContactsHelper helper;
+    private volatile SpritesHelper helper;
 
     @Override
     public boolean onCreate() {
         if (BuildConfig.DEBUG) { Log.d(TAG, "created"); }
-        helper = new ContactsHelper(getContext());
+        helper = new SpritesHelper(getContext());
         return null != helper;
     }
 
@@ -112,9 +107,9 @@ public class ContactsProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case CONTACTS_DIR:
-                return ContactsContract.CONTENT_TYPE_DIR;
+                return SpritesContract.CONTENT_TYPE_DIR;
             case CONTACTS_ITEM:
-                return ContactsContract.CONTENT_TYPE_ITEM;
+                return SpritesContract.CONTENT_TYPE_ITEM;
             default:
                 return null;
         }
@@ -134,10 +129,10 @@ public class ContactsProvider extends ContentProvider {
         }
 
         vals = COL_MAP.translateCols(vals);
-        vals.put(ContactsHelper.COL_DIRTY, MARK);
+        vals.put(SpritesHelper.COL_DIRTY, MARK);
 
         String xact = RESTService.insert(getContext(), vals);
-        vals.put(ContactsHelper.COL_SYNC, xact);
+        vals.put(SpritesHelper.COL_SYNC, xact);
 
         return localInsert(uri, vals);
     }
@@ -167,9 +162,11 @@ public class ContactsProvider extends ContentProvider {
         vals = COL_MAP.translateCols(vals);
 
         if (!remoteSync) {
-            vals.put(ContactsHelper.COL_DIRTY, MARK);
+            vals.put(SpritesHelper.COL_DIRTY, MARK);
             String xact = RESTService.update(getContext(), getRemoteId(uri), vals);
-            if (null != xact) { vals.put(ContactsHelper.COL_SYNC, xact); }
+            if (null != xact) {
+                vals.put(SpritesHelper.COL_SYNC, xact);
+            }
         }
 
         return localUpdate(uri, vals, sel, sArgs);
@@ -200,11 +197,13 @@ public class ContactsProvider extends ContentProvider {
         if (remoteSync) { return localDelete(uri, sel, sArgs); }
 
         ContentValues vals = new ContentValues();
-        vals.put(ContactsHelper.COL_DELETED, MARK);
-        vals.put(ContactsHelper.COL_DIRTY, MARK);
+        vals.put(SpritesHelper.COL_DELETED, MARK);
+        vals.put(SpritesHelper.COL_DIRTY, MARK);
 
         String xact = RESTService.delete(getContext(), getRemoteId(uri));
-        if (null != xact) { vals.put(ContactsHelper.COL_SYNC, xact); }
+        if (null != xact) {
+            vals.put(SpritesHelper.COL_SYNC, xact);
+        }
 
         return localUpdate(uri, vals, sel, sArgs);
 
@@ -240,11 +239,11 @@ public class ContactsProvider extends ContentProvider {
 
         qb.setProjectionMap(PROJ_MAP.getProjectionMap());
 
-        qb.setTables(ContactsHelper.TAB_CONTACTS);
+        qb.setTables(SpritesHelper.TAB_CONTACTS);
 
-        qb.appendWhere("(" + ContactsHelper.COL_DELETED + " IS NULL)");
+        qb.appendWhere("(" + SpritesHelper.COL_DELETED + " IS NULL)");
         if (0 <= pk) {
-            qb.appendWhere(" AND (" + ContactsHelper.COL_ID + "=" + pk + ")");
+            qb.appendWhere(" AND (" + SpritesHelper.COL_ID + "=" + pk + ")");
         }
 
         Cursor cur = localQuery(qb, proj, sel, selArgs, ord);
@@ -260,8 +259,8 @@ public class ContactsProvider extends ContentProvider {
         }
 
         long pk = helper.getWritableDatabase().insert(
-            ContactsHelper.TAB_CONTACTS,
-            ContactsContract.Columns.FNAME,
+                SpritesHelper.TAB_CONTACTS,
+                SpritesContract.Columns.FNAME,
             vals);
 
         if (0 > pk) { uri = null; }
@@ -290,7 +289,7 @@ public class ContactsProvider extends ContentProvider {
         }
 
         int updated = helper.getWritableDatabase().update(
-            ContactsHelper.TAB_CONTACTS,
+                SpritesHelper.TAB_CONTACTS,
             vals,
             sel,
             sArgs);
@@ -312,7 +311,7 @@ public class ContactsProvider extends ContentProvider {
         }
 
         int updated = helper.getWritableDatabase().delete(
-            ContactsHelper.TAB_CONTACTS,
+                SpritesHelper.TAB_CONTACTS,
             sel,
             sArgs);
 
@@ -347,13 +346,13 @@ public class ContactsProvider extends ContentProvider {
     // Client side only!  Not for use on server URIs!
     private String getRemoteId(Uri uri) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(ContactsHelper.TAB_CONTACTS);
+        qb.setTables(SpritesHelper.TAB_CONTACTS);
         qb.appendWhere(PK_CONSTRAINT + ContentUris.parseId(uri));
         Cursor c = localQuery(qb, PROJ_REM_ID, null, null, null);
         try {
             if (1 != c.getCount()) { return null; }
             c.moveToFirst();
-            return c.getString(c.getColumnIndex(ContactsHelper.COL_REMOTE_ID));
+            return c.getString(c.getColumnIndex(SpritesHelper.COL_REMOTE_ID));
         }
         finally {
             c.close();
