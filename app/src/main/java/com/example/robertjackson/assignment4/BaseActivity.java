@@ -19,6 +19,7 @@ public class BaseActivity extends Activity {
     private static final String TAG = "BASE";
 
     private static final SparseIntArray STATUS_COLOR_MAP;
+
     static {
         SparseIntArray a = new SparseIntArray();
         a.put(SpritesContract.STATUS_OK, Color.GREEN);
@@ -27,11 +28,19 @@ public class BaseActivity extends Activity {
         STATUS_COLOR_MAP = a;
     }
 
+    /**
+     * @param status
+     * @param view
+     */
     protected static void setStatusBackground(int status, View view) {
         int color = STATUS_COLOR_MAP.get(status);
         view.setBackgroundColor((0 != color) ? color : Color.BLACK);
     }
 
+    /**
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -39,6 +48,10 @@ public class BaseActivity extends Activity {
         return true;
     }
 
+    /**
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

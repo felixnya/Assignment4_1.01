@@ -31,16 +31,18 @@ public class SpritesProvider extends ContentProvider {
             .addColumn(SpritesContract.Columns.PANEL_WIDTH, SpritesHelper.COL_PANEL_WIDTH)
             .addColumn(SpritesContract.Columns.X, SpritesHelper.COL_X)
             .addColumn(SpritesContract.Columns.Y, SpritesHelper.COL_Y)
-        .addColumn(
-                SpritesContract.Columns.STATUS,
-            "CASE"
-                    + " WHEN " + SpritesHelper.COL_SYNC + " NOT NULL "
-                    + " THEN " + SpritesContract.STATUS_SYNC
-                    + " WHEN " + SpritesHelper.COL_DIRTY + " NOT NULL "
-                    + " THEN " + SpritesContract.STATUS_DIRTY
-                    + " ELSE " + SpritesContract.STATUS_OK + " END")
-        .build();
-
+            .addColumn(
+                    SpritesContract.Columns.STATUS,
+                    "CASE"
+                            + " WHEN " + SpritesHelper.COL_SYNC + " NOT NULL "
+                            + " THEN " + SpritesContract.STATUS_SYNC
+                            + " WHEN " + SpritesHelper.COL_DIRTY + " NOT NULL "
+                            + " THEN " + SpritesContract.STATUS_DIRTY
+                            + " ELSE " + SpritesContract.STATUS_OK + " END")
+            .build();
+    /**
+     *
+     */
     private static final ColumnMap COL_MAP = new ColumnMap.Builder()
             .addColumn(
                     SpritesContract.Columns.ID,
@@ -113,13 +115,22 @@ public class SpritesProvider extends ContentProvider {
 
     private volatile SpritesHelper helper;
 
+    /**
+     * @return
+     */
     @Override
     public boolean onCreate() {
-        if (BuildConfig.DEBUG) { Log.d(TAG, "created"); }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "created");
+        }
         helper = new SpritesHelper(getContext());
         return null != helper;
     }
 
+    /**
+     * @param uri
+     * @return
+     */
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
@@ -132,9 +143,16 @@ public class SpritesProvider extends ContentProvider {
         }
     }
 
+    /**
+     * @param uri
+     * @param vals
+     * @return
+     */
     @Override
     public Uri insert(Uri uri, ContentValues vals) {
-        if (BuildConfig.DEBUG) { Log.d(TAG, "insert@" + uri); }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "insert@" + uri);
+        }
 
         switch (uriMatcher.match(uri)) {
             case SPRITES_DIR:
@@ -142,7 +160,7 @@ public class SpritesProvider extends ContentProvider {
 
             default:
                 throw new UnsupportedOperationException(
-                    "Unrecognized URI: " + uri);
+                        "Unrecognized URI: " + uri);
         }
 
         vals = COL_MAP.translateCols(vals);
@@ -154,9 +172,18 @@ public class SpritesProvider extends ContentProvider {
         return localInsert(uri, vals);
     }
 
+    /**
+     * @param uri
+     * @param vals
+     * @param sel
+     * @param sArgs
+     * @return
+     */
     @Override
     public int update(Uri uri, ContentValues vals, String sel, String[] sArgs) {
-        if (BuildConfig.DEBUG) { Log.d(TAG, "update@" + uri); }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "update@" + uri);
+        }
 
         boolean remoteSync = false;
         switch (uriMatcher.match(uri)) {
@@ -173,7 +200,7 @@ public class SpritesProvider extends ContentProvider {
 
             default:
                 throw new UnsupportedOperationException(
-                    "Unrecognized URI: " + uri);
+                        "Unrecognized URI: " + uri);
         }
 
         vals = COL_MAP.translateCols(vals);
@@ -189,9 +216,17 @@ public class SpritesProvider extends ContentProvider {
         return localUpdate(uri, vals, sel, sArgs);
     }
 
+    /**
+     * @param uri
+     * @param sel
+     * @param sArgs
+     * @return
+     */
     @Override
     public int delete(Uri uri, String sel, String[] sArgs) {
-        if (BuildConfig.DEBUG) { Log.d(TAG, "delete@" + uri); }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "delete@" + uri);
+        }
 
         boolean remoteSync = false;
         switch (uriMatcher.match(uri)) {
@@ -208,10 +243,12 @@ public class SpritesProvider extends ContentProvider {
 
             default:
                 throw new UnsupportedOperationException(
-                    "Unrecognized URI: " + uri);
+                        "Unrecognized URI: " + uri);
         }
 
-        if (remoteSync) { return localDelete(uri, sel, sArgs); }
+        if (remoteSync) {
+            return localDelete(uri, sel, sArgs);
+        }
 
         ContentValues vals = new ContentValues();
         vals.put(SpritesHelper.COL_DELETED, MARK);
@@ -226,17 +263,26 @@ public class SpritesProvider extends ContentProvider {
 
     }
 
+    /**
+     * @param uri
+     * @param proj
+     * @param sel
+     * @param selArgs
+     * @param ord
+     * @return
+     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @SuppressWarnings("fallthrough")
     @Override
     public Cursor query(
-        Uri uri,
-        String[] proj,
-        String sel,
-        String[] selArgs,
-        String ord)
-    {
-        if (BuildConfig.DEBUG) { Log.d(TAG, "query@" + uri); }
+            Uri uri,
+            String[] proj,
+            String sel,
+            String[] selArgs,
+            String ord) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "query@" + uri);
+        }
 
         long pk = -1;
         switch (uriMatcher.match(uri)) {
@@ -270,6 +316,11 @@ public class SpritesProvider extends ContentProvider {
         return cur;
     }
 
+    /**
+     * @param uri
+     * @param vals
+     * @return
+     */
     public Uri localInsert(Uri uri, ContentValues vals) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "insert@" + uri + ": {" + vals + "}");
@@ -278,10 +329,11 @@ public class SpritesProvider extends ContentProvider {
         long pk = helper.getWritableDatabase().insert(
                 SpritesHelper.TAB_SPRITES,
                 SpritesContract.Columns.ID,
-            vals);
+                vals);
 
-        if (0 > pk) { uri = null; }
-        else {
+        if (0 > pk) {
+            uri = null;
+        } else {
             uri = uri.buildUpon().appendPath(String.valueOf(pk)).build();
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -289,27 +341,35 @@ public class SpritesProvider extends ContentProvider {
         return uri;
     }
 
+    /**
+     * @param uri
+     * @param vals
+     * @param sel
+     * @param sArgs
+     * @return
+     */
     public int localUpdate(
-        Uri uri,
-        ContentValues vals,
-        String sel,
-        String[] sArgs)
-    {
+            Uri uri,
+            ContentValues vals,
+            String sel,
+            String[] sArgs) {
         if (BuildConfig.DEBUG) {
             StringBuilder buf = new StringBuilder(sel);
             if (null != sArgs) {
-                for (String s: sArgs) { buf.append(",").append(s); }
+                for (String s : sArgs) {
+                    buf.append(",").append(s);
+                }
             }
             Log.d(
-                TAG,
-                "update@" + uri + "(" + buf.toString() +"): {" + vals + "}");
+                    TAG,
+                    "update@" + uri + "(" + buf.toString() + "): {" + vals + "}");
         }
 
         int updated = helper.getWritableDatabase().update(
                 SpritesHelper.TAB_SPRITES,
-            vals,
-            sel,
-            sArgs);
+                vals,
+                sel,
+                sArgs);
 
         if (0 < updated) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -318,19 +378,27 @@ public class SpritesProvider extends ContentProvider {
         return updated;
     }
 
+    /**
+     * @param uri
+     * @param sel
+     * @param sArgs
+     * @return
+     */
     public int localDelete(Uri uri, String sel, String[] sArgs) {
         if (BuildConfig.DEBUG) {
             StringBuilder buf = new StringBuilder(sel);
             if (null != sArgs) {
-                for (String s: sArgs) { buf.append(",").append(s); }
+                for (String s : sArgs) {
+                    buf.append(",").append(s);
+                }
             }
-            Log.d(TAG, "delete@" + uri + "(" + buf.toString() +")");
+            Log.d(TAG, "delete@" + uri + "(" + buf.toString() + ")");
         }
 
         int updated = helper.getWritableDatabase().delete(
                 SpritesHelper.TAB_SPRITES,
-            sel,
-            sArgs);
+                sel,
+                sArgs);
 
         if (0 < updated) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -339,23 +407,34 @@ public class SpritesProvider extends ContentProvider {
         return updated;
     }
 
+    /**
+     * @param qb
+     * @param proj
+     * @param sel
+     * @param selArgs
+     * @param ord
+     * @return
+     */
     public Cursor localQuery(
-        SQLiteQueryBuilder qb,
-        String[] proj,
-        String sel,
-        String[] selArgs,
-        String ord)
-    {
+            SQLiteQueryBuilder qb,
+            String[] proj,
+            String sel,
+            String[] selArgs,
+            String ord) {
         return qb.query(
-            helper.getWritableDatabase(),
-            proj,
-            sel,
-            selArgs,
-            null,
-            null,
-            ord);
+                helper.getWritableDatabase(),
+                proj,
+                sel,
+                selArgs,
+                null,
+                null,
+                ord);
     }
 
+    /**
+     * @param uri
+     * @return
+     */
     // !!! Race condition
     // If you try to delete or update something that has not yet
     // been synched with the server, things may happen out of order.
@@ -367,20 +446,26 @@ public class SpritesProvider extends ContentProvider {
         qb.appendWhere(PK_CONSTRAINT + ContentUris.parseId(uri));
         Cursor c = localQuery(qb, PROJ_REM_ID, null, null, null);
         try {
-            if (1 != c.getCount()) { return null; }
+            if (1 != c.getCount()) {
+                return null;
+            }
             c.moveToFirst();
             return c.getString(c.getColumnIndex(SpritesHelper.COL_REMOTE_ID));
-        }
-        finally {
+        } finally {
             c.close();
         }
     }
 
+    /**
+     * @param uri
+     * @param sel
+     * @return
+     */
     private String addPkConstraint(Uri uri, String sel) {
         String pkConstraint = PK_CONSTRAINT + ContentUris.parseId(uri);
         sel = (null == sel)
-            ? pkConstraint
-            : "(" + pkConstraint + ") AND (" + sel + ")";
+                ? pkConstraint
+                : "(" + pkConstraint + ") AND (" + sel + ")";
         return sel;
     }
 }

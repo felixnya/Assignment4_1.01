@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
 
     <TextView
@@ -21,6 +21,7 @@
         android:text="@string/detail_id_label"
         android:textSize="24sp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/activity_detail_id"
         android:layout_width="fill_parent"
@@ -40,6 +41,7 @@
         android:text="@string/detail_dx_label"
         android:textSize="24sp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/activity_detail_dx"
         android:layout_width="fill_parent"
@@ -60,6 +62,7 @@
         android:text="@string/detail_dy_label"
         android:textSize="24sp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/activity_detail_dy"
         android:layout_width="fill_parent"
@@ -81,6 +84,7 @@
         android:text="@string/detail_panelheight_label"
         android:textSize="24sp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/activity_detail_panelheight"
         android:layout_width="fill_parent"
@@ -173,6 +177,7 @@
         android:layout_toRightOf="@+id/activity_detail_color_label"
         android:text="java.awt.Color[r=0,g=0,b=255]"
         android:textSize="18sp" />
+
     <Button
         android:id="@+id/activity_detail_update"
         android:layout_width="wrap_content"
@@ -180,6 +185,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/detail_update" />
+
     <Button
         android:id="@+id/activity_detail_delete"
         android:layout_width="wrap_content"

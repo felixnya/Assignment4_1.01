@@ -9,18 +9,22 @@ public final class SpritesContract {
     public static final String TABLE = "sprite";
     public static final String AUTHORITY = "com.enterpriseandroid.restfulcontacts.SPRITES";
     public static final Uri URI
-        = new Uri.Builder()
+            = new Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
             .authority(AUTHORITY)
             .appendPath(TABLE)
             .build();
-    /** Contacts DIR type */
+    /**
+     * Contacts DIR type
+     */
     public static final String CONTENT_TYPE_DIR
             = ContentResolver.CURSOR_DIR_BASE_TYPE // needs to be changed
             + " + /vnd.com.enterpriseandroid.restfulsprites.sprite";
-    /** Contacts ITEM type */
+    /**
+     * Contacts ITEM type
+     */
     public static final String CONTENT_TYPE_ITEM
-        = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + " + /vnd.com.enterpriseandroid.restfulsprites.sprite";
     public static final int STATUS_OK = 0;
     public static final int STATUS_SYNC = 1;

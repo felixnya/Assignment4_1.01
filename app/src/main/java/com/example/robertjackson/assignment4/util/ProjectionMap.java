@@ -21,11 +21,24 @@ import java.util.Map;
 
 
 /**
- *
- * @version $Revision: $
  * @author <a href="mailto:blake.meike@gmail.com">G. Blake Meike</a>
+ * @version $Revision: $
  */
 public class ProjectionMap {
+
+    private final Map<String, String> colMap;
+
+
+    ProjectionMap(Map<String, String> colMap) {
+        this.colMap = Collections.unmodifiableMap(colMap);
+    }
+
+    /**
+     * @return the projection map
+     */
+    public Map<String, String> getProjectionMap() {
+        return colMap;
+    }
 
     /**
      * Builder
@@ -56,18 +69,8 @@ public class ProjectionMap {
         /**
          * @return the column map
          */
-        public ProjectionMap build() { return new ProjectionMap(colMap); }
+        public ProjectionMap build() {
+            return new ProjectionMap(colMap);
+        }
     }
-
-
-    private final Map<String, String> colMap;
-
-    ProjectionMap(Map<String, String> colMap) {
-        this.colMap = Collections.unmodifiableMap(colMap);;
-    }
-
-    /**
-     * @return the projection map
-     */
-    public Map<String, String> getProjectionMap() { return colMap; }
 }

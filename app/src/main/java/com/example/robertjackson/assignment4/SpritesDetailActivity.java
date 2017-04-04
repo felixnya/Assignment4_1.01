@@ -18,13 +18,12 @@ import com.example.robertjackson.assignment4.data.SpritesContract;
 
 
 public class SpritesDetailActivity extends BaseActivity
-    implements LoaderManager.LoaderCallbacks<Cursor>
-{
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String KEY_URI = "SpriteDetailActivity.SPRITE_URI";
 
     private static final int LOADER_ID = 58;
 
-    private static final String[] PROJ = new String[] {
+    private static final String[] PROJ = new String[]{
             // values taken from SpritesContract.java
             SpritesContract.Columns.ID,
             SpritesContract.Columns.COLOR,
@@ -55,26 +54,46 @@ public class SpritesDetailActivity extends BaseActivity
     private String y = "";
     private Uri contactUri;
 
+    /**
+     * @param id
+     * @param args
+     * @return
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, contactUri, PROJ, null, null, null);
     }
 
+    /**
+     * @param loader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         populateView(cursor);
     }
 
+    /**
+     * @param loader
+     */
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) { }
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 
+    /**
+     * @param state
+     */
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
 
-        if (null == state) { state = getIntent().getExtras(); }
+        if (null == state) {
+            state = getIntent().getExtras();
+        }
         String uri = null;
-        if (null != state) { uri = state.getString(KEY_URI); }
+        if (null != state) {
+            uri = state.getString(KEY_URI);
+        }
         if (null != uri) {
             contactUri = Uri.parse(uri);
             getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -93,16 +112,25 @@ public class SpritesDetailActivity extends BaseActivity
         yView = (TextView) findViewById(R.id.activity_detail_y);
 
         findViewById(R.id.activity_detail_update).setOnClickListener(
-            new View.OnClickListener() {
-                @Override public void onClick(View v) { update(); }
-            });
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        update();
+                    }
+                });
 
         findViewById(R.id.activity_detail_delete).setOnClickListener(
-            new View.OnClickListener() {
-                @Override public void onClick(View v) { delete( ); }
-            });
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        delete();
+                    }
+                });
     }
 
+    /**
+     * @param state
+     */
     @Override
     protected void onSaveInstanceState(Bundle state) {
         if (null != contactUri) {
@@ -110,6 +138,9 @@ public class SpritesDetailActivity extends BaseActivity
         }
     }
 
+    /**
+     *
+     */
     void delete() {
         if (null != contactUri) {
             new DeleteSprite(getContentResolver()).execute(contactUri);
@@ -117,6 +148,9 @@ public class SpritesDetailActivity extends BaseActivity
         goToSprites();
     }
 
+    /**
+     *
+     */
     void update() {
 
         ContentValues vals = new ContentValues();
@@ -132,12 +166,17 @@ public class SpritesDetailActivity extends BaseActivity
         goToSprites();
     }
 
+    /**
+     * @param c
+     */
     private void populateView(Cursor c) {
-        if (!c.moveToNext()) { return; }
+        if (!c.moveToNext()) {
+            return;
+        }
 
         setStatusBackground(
                 c.getInt(c.getColumnIndex(SpritesContract.Columns.STATUS)),
-            statusView);
+                statusView);
 
         String s;
 
@@ -167,26 +206,44 @@ public class SpritesDetailActivity extends BaseActivity
         yView.setText(y);
     }
 
+    /**
+     *
+     */
     private void goToSprites() {
         Intent intent = new Intent(this, SpritesActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 
+    /**
+     * @param c
+     * @param col
+     * @return
+     */
     private String getString(Cursor c, String col) {
         return c.getString(c.getColumnIndex(col));
     }
 
+    /**
+     * @param view
+     * @param oldVal
+     * @param vals
+     * @param col
+     */
     private void addString(
-        TextView view,
-        String oldVal,
-        ContentValues vals,
-        String col)
-    {
+            TextView view,
+            String oldVal,
+            ContentValues vals,
+            String col) {
         String s = view.getText().toString();
-        if (!oldVal.equals(s)) { vals.put(col, s); }
+        if (!oldVal.equals(s)) {
+            vals.put(col, s);
+        }
     }
 
+    /**
+     *
+     */
     static class UpdateSprite extends AsyncTask<Uri, Void, Void> {
         private final ContentResolver resolver;
         private final ContentValues vals;
@@ -196,6 +253,10 @@ public class SpritesDetailActivity extends BaseActivity
             this.vals = vals;
         }
 
+        /**
+         * @param args
+         * @return
+         */
         @Override
         protected Void doInBackground(Uri... args) {
             Uri uri = args[0];
@@ -208,6 +269,9 @@ public class SpritesDetailActivity extends BaseActivity
         }
     }
 
+    /**
+     *
+     */
     static class DeleteSprite extends AsyncTask<Uri, Void, Void> {
         private final ContentResolver resolver;
 

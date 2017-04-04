@@ -15,38 +15,82 @@
  */
 package com.example.robertjackson.assignment4.util;
 
+import android.content.ContentValues;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.content.ContentValues;
-
 
 /**
- *
- * @version $Revision: $
  * @author <a href="mailto:blake.meike@gmail.com">G. Blake Meike</a>
+ * @version $Revision: $
  */
 public class ColumnMap {
-    /** Column Type */
-    public static enum Type {
-        /** boolean */ BOOLEAN,
-        /** byte */ BYTE,
-        /** byte[] */ BYTEARRAY,
-        /** double */ DOUBLE,
-        /** float */ FLOAT,
-        /** int */ INTEGER,
-        /** long */ LONG,
-        /** short */ SHORT,
-        /** String */ STRING
-    };
+    private final Map<String, ColumnDef> colMap;
+
+    ColumnMap(Map<String, ColumnDef> colMap) {
+        this.colMap = Collections.unmodifiableMap(colMap);
+    }
+
+    /**
+     * @param vals
+     * @return content values for actual table
+     */
+    public ContentValues translateCols(ContentValues vals) {
+        ContentValues newVals = new ContentValues();
+        for (String colName : vals.keySet()) {
+            ColumnDef colDef = colMap.get(colName);
+            if (null == colDef) {
+                throw new IllegalArgumentException(
+                        "Unrecognized column: " + colName);
+            }
+            colDef.copy(colName, vals, newVals);
+        }
+
+        return newVals;
+    }
+
+
+    /**
+     * Column Type
+     */
+    public enum Type {
+        /**
+         * boolean
+         */BOOLEAN,
+        /**
+         * byte
+         */BYTE,
+        /**
+         * byte[]
+         */BYTEARRAY,
+        /**
+         * double
+         */DOUBLE,
+        /**
+         * float
+         */FLOAT,
+        /**
+         * int
+         */INTEGER,
+        /**
+         * long
+         */LONG,
+        /**
+         * short
+         */SHORT,
+        /**
+         * String
+         */STRING
+    }
 
     /**
      * Builder
      */
     public static class Builder {
         private final Map<String, ColumnDef> colMap
-            = new HashMap<String, ColumnDef>();
+                = new HashMap<String, ColumnDef>();
 
         /**
          * @param virtCol
@@ -62,7 +106,9 @@ public class ColumnMap {
         /**
          * @return the column map
          */
-        public ColumnMap build() { return new ColumnMap(colMap); }
+        public ColumnMap build() {
+            return new ColumnMap(colMap);
+        }
     }
 
     private static class ColumnDef {
@@ -114,30 +160,5 @@ public class ColumnMap {
                     break;
             }
         }
-    }
-
-
-    private final Map<String, ColumnDef> colMap;
-
-    ColumnMap(Map<String, ColumnDef> colMap) {
-        this.colMap = Collections.unmodifiableMap(colMap);;
-    }
-
-    /**
-     * @param vals
-     * @return content values for actual table
-     */
-    public ContentValues translateCols(ContentValues vals) {
-        ContentValues newVals = new ContentValues();
-        for (String colName : vals.keySet()) {
-            ColumnDef colDef = colMap.get(colName);
-            if (null == colDef) {
-                throw new IllegalArgumentException(
-                    "Unrecognized column: " + colName);
-            }
-            colDef.copy(colName, vals, newVals);
-        }
-
-        return newVals;
     }
 }

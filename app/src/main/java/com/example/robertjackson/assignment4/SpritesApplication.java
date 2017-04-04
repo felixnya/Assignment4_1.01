@@ -7,8 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class SpritesApplication extends Application
-    implements SharedPreferences.OnSharedPreferenceChangeListener
-{
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "APP";
 
     private static final String EMULATOR_HOST_IP = "localhost";
@@ -51,36 +50,46 @@ public class SpritesApplication extends Application
 
     }
 
-    
+    /**
+     *
+     */
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.DEBUG) { Log.d(TAG, "Application up!"); }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Application up!");
+        }
 
         keyApiRoot = getString(R.string.prefs_url_key);
 
         PreferenceManager.getDefaultSharedPreferences(this)
-            .registerOnSharedPreferenceChangeListener(this);
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
+    /**
+     * @param prefs
+     * @param key
+     */
     @Override
     public synchronized void onSharedPreferenceChanged(
-        SharedPreferences prefs,
-        String key)
-    {
+            SharedPreferences prefs,
+            String key) {
         apiRootUri = null;
     }
 
+    /**
+     * @return
+     */
     public Uri getApiUri() {
         synchronized (this) {
             if (null == apiRootUri) {
-               // Using a preference allows setting configuration of this
-               // value - but it also makes the value persistent.  Please
-               // keep this in mind if you can the url using the variables
-               // above.
-               apiRootUri = Uri.parse(
-                   PreferenceManager.getDefaultSharedPreferences(this)
-                       .getString(keyApiRoot, DEFAULT_API_ROOT));
+                // Using a preference allows setting configuration of this
+                // value - but it also makes the value persistent.  Please
+                // keep this in mind if you can the url using the variables
+                // above.
+                apiRootUri = Uri.parse(
+                        PreferenceManager.getDefaultSharedPreferences(this)
+                                .getString(keyApiRoot, DEFAULT_API_ROOT));
             }
             return apiRootUri;
         }

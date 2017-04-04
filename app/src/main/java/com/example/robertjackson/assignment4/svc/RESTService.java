@@ -64,7 +64,9 @@ public class RESTService extends IntentService {
     }
 
     public static String delete(Context ctxt, String id) {
-        if (null == id) { return null; }
+        if (null == id) {
+            return null;
+        }
 
         Intent intent = RESTService.getIntent(ctxt, RESTService.Op.DELETE);
 
@@ -76,7 +78,9 @@ public class RESTService extends IntentService {
     }
 
     public static String update(Context ctxt, String id, ContentValues vals) {
-        if (null == id) { return null; }
+        if (null == id) {
+            return null;
+        }
 
         Intent intent = RESTService.getIntent(ctxt, RESTService.Op.UPDATE);
 
@@ -139,7 +143,7 @@ public class RESTService extends IntentService {
     public void onCreate() {
         super.onCreate();
         USER_AGENT = getString(R.string.app_name)
-            + "/" + getString(R.string.app_version);
+                + "/" + getString(R.string.app_version);
     }
 
     @Override
@@ -150,7 +154,9 @@ public class RESTService extends IntentService {
 
     private void sendRequest(Bundle args) {
         int op = 0;
-        if (args.containsKey(OP)) { op = args.getInt(OP); }
+        if (args.containsKey(OP)) {
+            op = args.getInt(OP);
+        }
         switch (Op.toOp(op)) {
             case CREATE:
                 createSprite(args);
@@ -181,23 +187,21 @@ public class RESTService extends IntentService {
             String payload = new MessageHandler().marshal(args);
 
             sendRequest(
-                HttpMethod.POST,
-                uri,
-                payload,
-                new ResponseHandler() {
-                    @Override
-                    public void handleResponse(BufferedReader in)
-                        throws IOException
-                    {
-                        new MessageHandler().unmarshal(in, vals);
-                    } });
+                    HttpMethod.POST,
+                    uri,
+                    payload,
+                    new ResponseHandler() {
+                        @Override
+                        public void handleResponse(BufferedReader in)
+                                throws IOException {
+                            new MessageHandler().unmarshal(in, vals);
+                        }
+                    });
 
             vals.putNull(SpritesContract.Columns.DIRTY);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.w(TAG, "create failed: " + e, e);
-        }
-        finally {
+        } finally {
             cleanup(args, vals);
         }
     }
@@ -208,31 +212,29 @@ public class RESTService extends IntentService {
         }
 
         Uri uri = ((SpritesApplication) getApplication()).getApiUri()
-            .buildUpon().appendPath(args.getString(ID)).build();
+                .buildUpon().appendPath(args.getString(ID)).build();
 
         final ContentValues vals = new ContentValues();
         try {
             String payload = new MessageHandler().marshal(args);
 
             sendRequest(
-                HttpMethod.PUT,
-                uri,
-                payload,
-                new ResponseHandler() {
-                    @Override
-                    public void handleResponse(BufferedReader in)
-                        throws IOException
-                    {
-                        new MessageHandler().unmarshal(in, vals);
-                    } });
+                    HttpMethod.PUT,
+                    uri,
+                    payload,
+                    new ResponseHandler() {
+                        @Override
+                        public void handleResponse(BufferedReader in)
+                                throws IOException {
+                            new MessageHandler().unmarshal(in, vals);
+                        }
+                    });
 
             checkId(args, vals);
             vals.putNull(SpritesContract.Columns.DIRTY);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.w(TAG, "update failed: " + e);
-        }
-        finally {
+        } finally {
             cleanup(args, vals);
         }
     }
@@ -242,10 +244,11 @@ public class RESTService extends IntentService {
             throw new IllegalArgumentException("missing id in delete");
         }
         Uri uri = ((SpritesApplication) getApplication()).getApiUri()
-            .buildUpon().appendPath(args.getString(ID)).build();
+                .buildUpon().appendPath(args.getString(ID)).build();
 
-        try { sendRequest(HttpMethod.DELETE, uri, null, null); }
-        catch (Exception e) {
+        try {
+            sendRequest(HttpMethod.DELETE, uri, null, null);
+        } catch (Exception e) {
             cleanup(args, null);
             return;
         }
@@ -260,11 +263,13 @@ public class RESTService extends IntentService {
         getContentResolver().delete(
                 SpritesContract.URI,
                 SpritesProvider.SYNC_CONSTRAINT,
-            new String[] { args.getString(XACT) });
+                new String[]{args.getString(XACT)});
     }
 
     private void cleanup(Bundle args, ContentValues vals) {
-        if (null == vals) { vals = new ContentValues(); }
+        if (null == vals) {
+            vals = new ContentValues();
+        }
 
         vals.putNull(SpritesContract.Columns.SYNC);
         if (BuildConfig.DEBUG) {
@@ -275,16 +280,15 @@ public class RESTService extends IntentService {
         String[] selArgs;
         if (!args.containsKey(ID)) {
             sel = SpritesProvider.SYNC_CONSTRAINT;
-            selArgs = new String[] { args.getString(XACT) };
-        }
-        else {
+            selArgs = new String[]{args.getString(XACT)};
+        } else {
             sel = new StringBuilder("(")
                     .append(SpritesProvider.SYNC_CONSTRAINT)
-                .append(") AND (")
+                    .append(") AND (")
                     .append(SpritesProvider.REMOTE_ID_CONSTRAINT)
-                .append(")")
-                .toString();
-            selArgs = new String[] { args.getString(XACT), args.getString(XACT) };
+                    .append(")")
+                    .toString();
+            selArgs = new String[]{args.getString(XACT), args.getString(XACT)};
         }
 
         // !!!
@@ -304,18 +308,17 @@ public class RESTService extends IntentService {
 
     // the return code is being ignored, at present
     private int sendRequest(
-        HttpMethod method,
-        Uri uri,
-        String payload,
-        ResponseHandler hdlr)
-        throws IOException
-        {
+            HttpMethod method,
+            Uri uri,
+            String payload,
+            ResponseHandler hdlr)
+            throws IOException {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "sending " + method + " @" + uri + ": " + payload);
         }
 
         HttpURLConnection conn
-            = (HttpURLConnection) new URL(uri.toString()).openConnection();
+                = (HttpURLConnection) new URL(uri.toString()).openConnection();
         int code = HttpURLConnection.HTTP_UNAVAILABLE;
         try {
             conn.setReadTimeout(HTTP_READ_TIMEOUT);
@@ -336,8 +339,8 @@ public class RESTService extends IntentService {
 
                 conn.connect();
                 Writer out = new OutputStreamWriter(
-                    new BufferedOutputStream(conn.getOutputStream()),
-                    "UTF-8");
+                        new BufferedOutputStream(conn.getOutputStream()),
+                        "UTF-8");
                 out.write(payload);
                 out.flush();
             }
@@ -346,17 +349,19 @@ public class RESTService extends IntentService {
 
             if (null != hdlr) {
                 hdlr.handleResponse(new BufferedReader(
-                    new InputStreamReader(conn.getInputStream())));
+                        new InputStreamReader(conn.getInputStream())));
             }
-        }
-        finally {
+        } finally {
             if (null != conn) {
-                try { conn.disconnect(); } catch (Exception e) { }
+                try {
+                    conn.disconnect();
+                } catch (Exception e) {
+                }
             }
         }
 
         return code;
-        }
+    }
 
     // odd that these aren't defined elsewhere...
     public enum HttpMethod {

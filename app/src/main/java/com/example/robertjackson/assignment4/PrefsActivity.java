@@ -1,23 +1,18 @@
 package com.example.robertjackson.assignment4;
 
-import java.util.List;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
+import java.util.List;
+
 
 public class PrefsActivity extends PreferenceActivity {
 
-    public static class SyncPrefs extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs);
-        }
-    }
-
+    /**
+     * @param savedInstanceState
+     */
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +22,19 @@ public class PrefsActivity extends PreferenceActivity {
         }
     }
 
+    /**
+     * @param target
+     */
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.pref_headers, target);
+    }
+
+    public static class SyncPrefs extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs);
+        }
     }
 }

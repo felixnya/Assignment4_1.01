@@ -26,11 +26,16 @@ public class SpritesHelper extends SQLiteOpenHelper {
     static final String COL_DIRTY = "dirty";             // boolean (null or MARK)
     static final String COL_SYNC = "sync";               // string
 
-
+    /**
+     * @param context
+     */
     public SpritesHelper(Context context) {
         super(context, DB_FILE, null, VERSION);
     }
 
+    /**
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
@@ -49,12 +54,17 @@ public class SpritesHelper extends SQLiteOpenHelper {
                         + COL_SYNC + " string UNIQUE)");
     }
 
+    /**
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             db.execSQL("drop table " + TAB_SPRITES);
+        } catch (SQLiteException e) {
         }
-        catch (SQLiteException e) { }
         onCreate(db);
     }
 }

@@ -54,6 +54,11 @@ public class MessageHandler {
         UNMARSHAL_TAB = m;
     }
 
+    /**
+     * @param args
+     * @return
+     * @throws JSONException
+     */
     public String marshal(Bundle args) throws JSONException {
         JSONObject payload = new JSONObject();
 
@@ -101,26 +106,37 @@ public class MessageHandler {
         return payload.toString();
     }
 
+    /**
+     * @param in
+     * @param vals
+     * @return
+     * @throws IOException
+     */
     public ContentValues unmarshal(Reader in, ContentValues vals)
-        throws IOException
-    {
+            throws IOException {
         JsonReader reader = null;
         try {
             reader = new JsonReader(in);
             unmarshalSprite(reader, vals);
 
-        }
-        finally {
+        } finally {
             if (null != reader) {
-                try { reader.close(); } catch (Exception e) {}
+                try {
+                    reader.close();
+                } catch (Exception e) {
+                }
             }
         }
         return vals;
     }
 
+    /**
+     * @param in
+     * @param vals
+     * @throws IOException
+     */
     public void unmarshalSprite(JsonReader in, ContentValues vals)
-        throws IOException
-    {
+            throws IOException {
         in.beginObject();
         while (in.hasNext()) {
             String key = in.nextName();
@@ -131,13 +147,19 @@ public class MessageHandler {
                 continue;
             }
 
-            if (TAG_LOCATION.equals(key)) { val = parseLocation(val); }
+            if (TAG_LOCATION.equals(key)) {
+                val = parseLocation(val);
+            }
 
             vals.put(col, val);
         }
         in.endObject();
     }
 
+    /**
+     * @param val
+     * @return
+     */
     private String parseLocation(String val) {
         return Uri.parse(val).getLastPathSegment();
     }

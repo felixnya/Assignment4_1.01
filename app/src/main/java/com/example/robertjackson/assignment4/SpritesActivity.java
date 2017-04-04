@@ -17,13 +17,12 @@ import com.example.robertjackson.assignment4.data.SpritesContract;
 
 
 public class SpritesActivity extends BaseActivity
-    implements LoaderManager.LoaderCallbacks<Cursor>
-{
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "SPRITES";
 
     private static final int LOADER_ID = 42;
 
-    private static final String[] PROJ = new String[] {
+    private static final String[] PROJ = new String[]{
             SpritesContract.Columns.ID,
             SpritesContract.Columns.DX,
             SpritesContract.Columns.DY,
@@ -35,7 +34,7 @@ public class SpritesActivity extends BaseActivity
     };
 
     private static final String[] FROM = new String[PROJ.length - 1];
-    private static final int[] TO = new int[] {
+    private static final int[] TO = new int[]{
             R.id.row_sprites_dx,
             R.id.row_sprites_status
     };
@@ -46,46 +45,62 @@ public class SpritesActivity extends BaseActivity
 
     private SimpleCursorAdapter listAdapter;
 
+    /**
+     * @param id
+     * @param args
+     * @return
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
-            this,
+                this,
                 SpritesContract.URI,
-            PROJ,
-            null,
-            null,
+                PROJ,
+                null,
+                null,
                 SpritesContract.Columns.DX + " ASC");
     }
 
+    /**
+     * @param loader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         listAdapter.swapCursor(cursor);
     }
 
+    /**
+     * @param loader
+     */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         listAdapter.swapCursor(null);
     }
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sprites);
 
         findViewById(R.id.activity_sprites_add).setOnClickListener(
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDetails(null);
-        } });
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDetails(null);
+                    }
+                });
 
         listAdapter = new SimpleCursorAdapter(
-            this,
+                this,
                 R.layout.sprite_row,
-            null,
-            FROM,
-            TO,
-            0);
+                null,
+                FROM,
+                TO,
+                0);
         listAdapter.setViewBinder(new StatusBinder());
 
         ListView listView
@@ -96,21 +111,30 @@ public class SpritesActivity extends BaseActivity
             @Override
             public void onItemClick(AdapterView<?> l, View v, int p, long id) {
                 showDetails(p);
-            } });
+            }
+        });
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
+    /**
+     * @param pos
+     */
     void showDetails(int pos) {
         Cursor c = (Cursor) listAdapter.getItem(pos);
         showDetails(SpritesContract.URI.buildUpon()
-            .appendPath(
-                    c.getString(c.getColumnIndex(SpritesContract.Columns.ID)))
-            .build());
+                .appendPath(
+                        c.getString(c.getColumnIndex(SpritesContract.Columns.ID)))
+                .build());
     }
 
+    /**
+     * @param uri
+     */
     void showDetails(Uri uri) {
-        if (BuildConfig.DEBUG) { Log.d(TAG, "adding contact"); }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "adding contact");
+        }
         Intent intent = new Intent();
         intent.setClass(this, SpritesDetailActivity.class);
         if (null != uri) {
@@ -124,6 +148,12 @@ public class SpritesActivity extends BaseActivity
         public StatusBinder() {
         }
 
+        /**
+         * @param view
+         * @param cursor
+         * @param idx
+         * @return
+         */
         @Override
         public boolean setViewValue(View view, Cursor cursor, int idx) {
             if (view.getId() != R.id.row_sprites_status) {
