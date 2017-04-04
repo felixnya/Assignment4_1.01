@@ -7,16 +7,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
 public class SpritesHelper extends SQLiteOpenHelper {
-    // contact data
-    public static final String COL_FNAME = "firstName";  // string
-    public static final String COL_LNAME = "lastName";   // string
-    public static final String COL_PHONE = "phone";      // string
-    public static final String COL_EMAIL = "email";      // string
-    static final int VERSION = 2;
-    static final String DB_FILE = "contacts.db";
-    static final String TAB_CONTACTS = "contacts";
+    // sprite column data
+    public static final String COL_COLOR = "color"; // string
+    public static final String COL_DX = "dx"; // string
+    public static final String COL_DY = "dy"; // string
+    public static final String COL_PANEL_HEIGHT = "panelheight"; // string
+    public static final String COL_PANEL_WIDTH = "panelwidth"; // string
+    public static final String COL_X = "x"; // string
+    public static final String COL_Y = "y"; // string
     // pk
-    static final String COL_ID = "id";                   // long
+    public static final String COL_ID = "id";                   // long
+    static final int VERSION = 2;
+    static final String DB_FILE = "enterprisesprites.db";
+    static final String TAB_SPRITES = "sprite";
     // meta-data
     static final String COL_REMOTE_ID = "remoteId";      // string
     static final String COL_DELETED = "deleted";         // boolean (null or MARK)
@@ -31,21 +34,26 @@ public class SpritesHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-            "CREATE TABLE " + TAB_CONTACTS + "("
-                + COL_ID + " integer PRIMARY KEY AUTOINCREMENT,"
-                + COL_FNAME + " text,"
-                + COL_LNAME + " text,"
-                + COL_PHONE + " text,"
-                + COL_EMAIL + " text,"
-                + COL_REMOTE_ID + " string UNIQUE,"
-                + COL_DELETED + " integer,"
-                + COL_DIRTY + " integer,"
-                + COL_SYNC + " string UNIQUE)");
+                "CREATE TABLE " + TAB_SPRITES + "("
+                        + COL_ID + " integer PRIMARY KEY AUTOINCREMENT,"
+                        + COL_COLOR + " text,"
+                        + COL_DX + " integer,"
+                        + COL_DY + " integer,"
+                        + COL_PANEL_HEIGHT + " integer,"
+                        + COL_PANEL_WIDTH + " integer,"
+                        + COL_X + " integer,"
+                        + COL_Y + " integer,"
+                        + COL_REMOTE_ID + " string UNIQUE,"
+                        + COL_DELETED + " integer,"
+                        + COL_DIRTY + " integer,"
+                        + COL_SYNC + " string UNIQUE)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try { db.execSQL("drop table " + TAB_CONTACTS); }
+        try {
+            db.execSQL("drop table " + TAB_SPRITES);
+        }
         catch (SQLiteException e) { }
         onCreate(db);
     }

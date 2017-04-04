@@ -24,10 +24,13 @@ public class SpritesProvider extends ContentProvider {
     private static final String TAG = "DB";
     private static final ProjectionMap PROJ_MAP = new ProjectionMap.Builder()
             .addColumn(SpritesContract.Columns.ID, SpritesHelper.COL_ID)
-            .addColumn(SpritesContract.Columns.FNAME, SpritesHelper.COL_FNAME)
-            .addColumn(SpritesContract.Columns.LNAME, SpritesHelper.COL_LNAME)
-            .addColumn(SpritesContract.Columns.PHONE, SpritesHelper.COL_PHONE)
-            .addColumn(SpritesContract.Columns.EMAIL, SpritesHelper.COL_EMAIL)
+            .addColumn(SpritesContract.Columns.COLOR, SpritesHelper.COL_COLOR)
+            .addColumn(SpritesContract.Columns.DX, SpritesHelper.COL_DX)
+            .addColumn(SpritesContract.Columns.DY, SpritesHelper.COL_DY)
+            .addColumn(SpritesContract.Columns.PANEL_HEIGHT, SpritesHelper.COL_PANEL_HEIGHT)
+            .addColumn(SpritesContract.Columns.PANEL_WIDTH, SpritesHelper.COL_PANEL_WIDTH)
+            .addColumn(SpritesContract.Columns.X, SpritesHelper.COL_X)
+            .addColumn(SpritesContract.Columns.Y, SpritesHelper.COL_Y)
         .addColumn(
                 SpritesContract.Columns.STATUS,
             "CASE"
@@ -39,42 +42,56 @@ public class SpritesProvider extends ContentProvider {
         .build();
 
     private static final ColumnMap COL_MAP = new ColumnMap.Builder()
-        .addColumn(
-                SpritesContract.Columns.ID,
-                SpritesHelper.COL_ID,
-            ColumnMap.Type.LONG)
-        .addColumn(
-                SpritesContract.Columns.FNAME,
-                SpritesHelper.COL_FNAME,
-            ColumnMap.Type.STRING)
-        .addColumn(
-                SpritesContract.Columns.LNAME,
-                SpritesHelper.COL_LNAME,
-            ColumnMap.Type.STRING)
-        .addColumn(
-                SpritesContract.Columns.PHONE,
-                SpritesHelper.COL_PHONE,
-            ColumnMap.Type.STRING)
-        .addColumn(
-                SpritesContract.Columns.EMAIL,
-                SpritesHelper.COL_EMAIL,
-            ColumnMap.Type.STRING)
-        .addColumn(
-                SpritesContract.Columns.REMOTE_ID,
-                SpritesHelper.COL_REMOTE_ID,
-            ColumnMap.Type.STRING)
-        .addColumn(
-                SpritesContract.Columns.DIRTY,
-                SpritesHelper.COL_DIRTY,
-            ColumnMap.Type.INTEGER)
-        .addColumn(
-                SpritesContract.Columns.SYNC,
-                SpritesHelper.COL_SYNC,
-            ColumnMap.Type.STRING)
-        .build();
+            .addColumn(
+                    SpritesContract.Columns.ID,
+                    SpritesHelper.COL_ID,
+                    ColumnMap.Type.LONG)
+// sprite columns
+            .addColumn(
+                    SpritesContract.Columns.COLOR,
+                    SpritesHelper.COL_COLOR,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.DX,
+                    SpritesHelper.COL_DX,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.DY,
+                    SpritesHelper.COL_DY,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.PANEL_HEIGHT,
+                    SpritesHelper.COL_PANEL_HEIGHT,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.PANEL_WIDTH,
+                    SpritesHelper.COL_PANEL_WIDTH,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.X,
+                    SpritesHelper.COL_X,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.Y,
+                    SpritesHelper.COL_Y,
+                    ColumnMap.Type.STRING)
+// end sprite columns
+            .addColumn(
+                    SpritesContract.Columns.REMOTE_ID,
+                    SpritesHelper.COL_REMOTE_ID,
+                    ColumnMap.Type.STRING)
+            .addColumn(
+                    SpritesContract.Columns.DIRTY,
+                    SpritesHelper.COL_DIRTY,
+                    ColumnMap.Type.INTEGER)
+            .addColumn(
+                    SpritesContract.Columns.SYNC,
+                    SpritesHelper.COL_SYNC,
+                    ColumnMap.Type.STRING)
+            .build();
 
-    private static final int CONTACTS_DIR = 1;
-    private static final int CONTACTS_ITEM = 2;
+    private static final int SPRITES_DIR = 1;
+    private static final int SPRITES_ITEM = 2;
 
     private static final UriMatcher uriMatcher;
     private static final String[] PROJ_REM_ID = new String[]{
@@ -87,11 +104,11 @@ public class SpritesProvider extends ContentProvider {
         uriMatcher.addURI(
                 SpritesContract.AUTHORITY,
                 SpritesContract.TABLE,
-            CONTACTS_DIR);
+                SPRITES_DIR);
         uriMatcher.addURI(
                 SpritesContract.AUTHORITY,
                 SpritesContract.TABLE + "/#",
-            CONTACTS_ITEM);
+                SPRITES_ITEM);
     }
 
     private volatile SpritesHelper helper;
@@ -106,9 +123,9 @@ public class SpritesProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
-            case CONTACTS_DIR:
+            case SPRITES_DIR:
                 return SpritesContract.CONTENT_TYPE_DIR;
-            case CONTACTS_ITEM:
+            case SPRITES_ITEM:
                 return SpritesContract.CONTENT_TYPE_ITEM;
             default:
                 return null;
@@ -120,7 +137,7 @@ public class SpritesProvider extends ContentProvider {
         if (BuildConfig.DEBUG) { Log.d(TAG, "insert@" + uri); }
 
         switch (uriMatcher.match(uri)) {
-            case CONTACTS_DIR:
+            case SPRITES_DIR:
                 break;
 
             default:
@@ -143,14 +160,14 @@ public class SpritesProvider extends ContentProvider {
 
         boolean remoteSync = false;
         switch (uriMatcher.match(uri)) {
-            case CONTACTS_DIR:
+            case SPRITES_DIR:
                 // !!!
                 // Allow transaction constrained update from the REST service.
                 // Should be a separate virtual table...
                 remoteSync = true;
                 break;
 
-            case CONTACTS_ITEM:
+            case SPRITES_ITEM:
                 sel = addPkConstraint(uri, sel);
                 break;
 
@@ -178,14 +195,14 @@ public class SpritesProvider extends ContentProvider {
 
         boolean remoteSync = false;
         switch (uriMatcher.match(uri)) {
-            case CONTACTS_DIR:
+            case SPRITES_DIR:
                 // !!!
                 // Allow transaction constrained update from the REST service.
                 // Should be a separate virtual table...
                 remoteSync = true;
                 break;
 
-            case CONTACTS_ITEM:
+            case SPRITES_ITEM:
                 sel = addPkConstraint(uri, sel);
                 break;
 
@@ -223,9 +240,9 @@ public class SpritesProvider extends ContentProvider {
 
         long pk = -1;
         switch (uriMatcher.match(uri)) {
-            case CONTACTS_ITEM:
+            case SPRITES_ITEM:
                 pk = ContentUris.parseId(uri);
-            case CONTACTS_DIR:
+            case SPRITES_DIR:
                 break;
 
             default:
@@ -239,7 +256,7 @@ public class SpritesProvider extends ContentProvider {
 
         qb.setProjectionMap(PROJ_MAP.getProjectionMap());
 
-        qb.setTables(SpritesHelper.TAB_CONTACTS);
+        qb.setTables(SpritesHelper.TAB_SPRITES);
 
         qb.appendWhere("(" + SpritesHelper.COL_DELETED + " IS NULL)");
         if (0 <= pk) {
@@ -259,8 +276,8 @@ public class SpritesProvider extends ContentProvider {
         }
 
         long pk = helper.getWritableDatabase().insert(
-                SpritesHelper.TAB_CONTACTS,
-                SpritesContract.Columns.FNAME,
+                SpritesHelper.TAB_SPRITES,
+                SpritesContract.Columns.ID,
             vals);
 
         if (0 > pk) { uri = null; }
@@ -289,7 +306,7 @@ public class SpritesProvider extends ContentProvider {
         }
 
         int updated = helper.getWritableDatabase().update(
-                SpritesHelper.TAB_CONTACTS,
+                SpritesHelper.TAB_SPRITES,
             vals,
             sel,
             sArgs);
@@ -311,7 +328,7 @@ public class SpritesProvider extends ContentProvider {
         }
 
         int updated = helper.getWritableDatabase().delete(
-                SpritesHelper.TAB_CONTACTS,
+                SpritesHelper.TAB_SPRITES,
             sel,
             sArgs);
 
@@ -346,7 +363,7 @@ public class SpritesProvider extends ContentProvider {
     // Client side only!  Not for use on server URIs!
     private String getRemoteId(Uri uri) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(SpritesHelper.TAB_CONTACTS);
+        qb.setTables(SpritesHelper.TAB_SPRITES);
         qb.appendWhere(PK_CONSTRAINT + ContentUris.parseId(uri));
         Cursor c = localQuery(qb, PROJ_REM_ID, null, null, null);
         try {
