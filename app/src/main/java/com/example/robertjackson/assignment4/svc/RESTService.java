@@ -38,10 +38,13 @@ public class RESTService extends IntentService {
     public static final int HTTP_CONN_TIMEOUT = 30 * 1000; // ms
     public static final String XACT = "RESTService.XACT";
     public static final String ID = "RESTService.ID";
-    public static final String FNAME = "RESTService.FNAME";
-    public static final String LNAME = "RESTService.LNAME";
-    public static final String PHONE = "RESTService.PHONE";
-    public static final String EMAIL = "RESTService.EMAIL";
+    public static final String COLOR = "RESTService.COLOR";
+    public static final String DX = "RESTService.DX";
+    public static final String DY = "RESTService.DY";
+    public static final String PANEL_HEIGHT = "RESTService.PANEL_HEIGHT";
+    public static final String PANEL_WIDTH = "RESTService.PANEL_WIDTH";
+    public static final String X = "RESTService.X";
+    public static final String Y = "RESTService.Y";
     private static final String TAG = "REST";
     private static final String OP = "RESTService.OP";
     private String USER_AGENT;
@@ -99,21 +102,37 @@ public class RESTService extends IntentService {
     // the server always wants all values
     private static void marshalRequest(ContentValues vals, Intent intent) {
         intent.putExtra(
-            RESTService.FNAME,
-                (!vals.containsKey(SpritesHelper.COL_FNAME))
-                        ? "" : vals.getAsString(SpritesHelper.COL_FNAME));
+                RESTService.ID,
+                (!vals.containsKey(SpritesHelper.COL_ID))
+                        ? "" : vals.getAsString(SpritesHelper.COL_ID));
         intent.putExtra(
-            RESTService.LNAME,
-                (!vals.containsKey(SpritesHelper.COL_LNAME))
-                        ? "" : vals.getAsString(SpritesHelper.COL_LNAME));
+                RESTService.COLOR,
+                (!vals.containsKey(SpritesHelper.COL_COLOR))
+                        ? "" : vals.getAsString(SpritesHelper.COL_COLOR));
         intent.putExtra(
-            RESTService.PHONE,
-                (!vals.containsKey(SpritesHelper.COL_PHONE))
-                        ? "" : vals.getAsString(SpritesHelper.COL_PHONE));
+                RESTService.DX,
+                (!vals.containsKey(SpritesHelper.COL_DX))
+                        ? "" : vals.getAsString(SpritesHelper.COL_DX));
         intent.putExtra(
-            RESTService.EMAIL,
-                (!vals.containsKey(SpritesHelper.COL_EMAIL))
-                        ? "" : vals.getAsString(SpritesHelper.COL_EMAIL));
+                RESTService.DY,
+                (!vals.containsKey(SpritesHelper.COL_DY))
+                        ? "" : vals.getAsString(SpritesHelper.COL_DY));
+        intent.putExtra(
+                RESTService.PANEL_HEIGHT,
+                (!vals.containsKey(SpritesHelper.COL_PANEL_HEIGHT))
+                        ? "" : vals.getAsString(SpritesHelper.COL_PANEL_HEIGHT));
+        intent.putExtra(
+                RESTService.PANEL_WIDTH,
+                (!vals.containsKey(SpritesHelper.COL_PANEL_WIDTH))
+                        ? "" : vals.getAsString(SpritesHelper.COL_PANEL_WIDTH));
+        intent.putExtra(
+                RESTService.X,
+                (!vals.containsKey(SpritesHelper.COL_X))
+                        ? "" : vals.getAsString(SpritesHelper.COL_X));
+        intent.putExtra(
+                RESTService.Y,
+                (!vals.containsKey(SpritesHelper.COL_Y))
+                        ? "" : vals.getAsString(SpritesHelper.COL_Y));
     }
 
     @Override
@@ -134,15 +153,15 @@ public class RESTService extends IntentService {
         if (args.containsKey(OP)) { op = args.getInt(OP); }
         switch (Op.toOp(op)) {
             case CREATE:
-                createContact(args);
+                createSprite(args);
                 break;
 
             case UPDATE:
-                updateContact(args);
+                updateSprite(args);
                 break;
 
             case DELETE:
-                deleteContact(args);
+                deleteSprite(args);
                 break;
 
             default:
@@ -151,7 +170,7 @@ public class RESTService extends IntentService {
         }
     }
 
-    private void createContact(Bundle args) {
+    private void createSprite(Bundle args) {
         if (args.containsKey(ID)) {
             throw new IllegalArgumentException("create must not specify id");
         }
@@ -183,7 +202,7 @@ public class RESTService extends IntentService {
         }
     }
 
-    private void updateContact(Bundle args) {
+    private void updateSprite(Bundle args) {
         if (!args.containsKey(ID)) {
             throw new IllegalArgumentException("missing id in update");
         }
@@ -218,7 +237,7 @@ public class RESTService extends IntentService {
         }
     }
 
-    private void deleteContact(Bundle args) {
+    private void deleteSprite(Bundle args) {
         if (!args.containsKey(ID)) {
             throw new IllegalArgumentException("missing id in delete");
         }

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.example.robertjackson.assignment4.data.SpritesContract;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,10 +16,15 @@ import java.util.Map;
 
 
 public class MessageHandler {
-    public static final String TAG_FNAME = "firstname";
-    public static final String TAG_LNAME = "lastname";
-    public static final String TAG_PHONE = "homephone";
-    public static final String TAG_EMAIL = "email";
+    // sprite columns
+    public static final String TAG_ID = "id";
+    public static final String TAG_COLOR = "color";
+    public static final String TAG_DX = "dx";
+    public static final String TAG_DY = "dy";
+    public static final String TAG_PANEL_HEIGHT = "panelheight";
+    public static final String TAG_PANEL_WIDTH = "panelwidth";
+    public static final String TAG_X = "x";
+    public static final String TAG_Y = "y";
     public static final String TAG_LOCATION = "location";
     private static final String TAG = "JSON";
     private static final Map<String, String> MARSHAL_TAB;
@@ -29,48 +32,70 @@ public class MessageHandler {
 
     static {
         Map<String, String> m = new HashMap<String, String>();
-        m.put(RESTService.FNAME, TAG_FNAME);
-        m.put(RESTService.LNAME, TAG_LNAME);
-        m.put(RESTService.PHONE, TAG_PHONE);
-        m.put(RESTService.EMAIL, TAG_EMAIL);
+        m.put(RESTService.ID, TAG_ID);
+        m.put(RESTService.COLOR, TAG_COLOR);
+        m.put(RESTService.DX, TAG_DX);
+        m.put(RESTService.DY, TAG_DY);
+        m.put(RESTService.PANEL_HEIGHT, TAG_PANEL_HEIGHT);
+        m.put(RESTService.PANEL_WIDTH, TAG_PANEL_WIDTH);
+        m.put(RESTService.X, TAG_X);
         MARSHAL_TAB = m;
     }
 
     static {
         Map<String, String> m = new HashMap<String, String>();
-        m.put(TAG_FNAME, SpritesContract.Columns.FNAME);
-        m.put(TAG_LNAME, SpritesContract.Columns.LNAME);
-        m.put(TAG_PHONE, SpritesContract.Columns.PHONE);
-        m.put(TAG_EMAIL, SpritesContract.Columns.EMAIL);
-        m.put(TAG_LOCATION, SpritesContract.Columns.REMOTE_ID);
+        m.put(RESTService.ID, TAG_ID);
+        m.put(RESTService.COLOR, TAG_COLOR);
+        m.put(RESTService.DX, TAG_DX);
+        m.put(RESTService.DY, TAG_DY);
+        m.put(RESTService.PANEL_HEIGHT, TAG_PANEL_HEIGHT);
+        m.put(RESTService.PANEL_WIDTH, TAG_PANEL_WIDTH);
+        m.put(RESTService.X, TAG_X);
         UNMARSHAL_TAB = m;
     }
 
     public String marshal(Bundle args) throws JSONException {
         JSONObject payload = new JSONObject();
 
-        if (args.containsKey(RESTService.FNAME)) {
+        if (args.containsKey(RESTService.ID)) {
             payload.put(
-                MARSHAL_TAB.get(RESTService.FNAME),
-                args.getString(RESTService.FNAME));
+                    MARSHAL_TAB.get(RESTService.ID),
+                    args.getString(RESTService.ID));
         }
-
-        if (args.containsKey(RESTService.LNAME)) {
+        if (args.containsKey(RESTService.COLOR)) {
             payload.put(
-                MARSHAL_TAB.get(RESTService.LNAME),
-                args.getString(RESTService.LNAME));
+                    MARSHAL_TAB.get(RESTService.COLOR),
+                    args.getString(RESTService.COLOR));
         }
-
-        if (args.containsKey(RESTService.PHONE)) {
+        if (args.containsKey(RESTService.DX)) {
             payload.put(
-                MARSHAL_TAB.get(RESTService.PHONE),
-                args.getString(RESTService.PHONE));
+                    MARSHAL_TAB.get(RESTService.DX),
+                    args.getString(RESTService.DX));
         }
-
-        if (args.containsKey(RESTService.EMAIL)) {
+        if (args.containsKey(RESTService.DY)) {
             payload.put(
-                MARSHAL_TAB.get(RESTService.EMAIL),
-                args.getString(RESTService.EMAIL));
+                    MARSHAL_TAB.get(RESTService.DY),
+                    args.getString(RESTService.DY));
+        }
+        if (args.containsKey(RESTService.PANEL_HEIGHT)) {
+            payload.put(
+                    MARSHAL_TAB.get(RESTService.PANEL_HEIGHT),
+                    args.getString(RESTService.PANEL_HEIGHT));
+        }
+        if (args.containsKey(RESTService.PANEL_WIDTH)) {
+            payload.put(
+                    MARSHAL_TAB.get(RESTService.PANEL_WIDTH),
+                    args.getString(RESTService.PANEL_WIDTH));
+        }
+        if (args.containsKey(RESTService.X)) {
+            payload.put(
+                    MARSHAL_TAB.get(RESTService.X),
+                    args.getString(RESTService.X));
+        }
+        if (args.containsKey(RESTService.Y)) {
+            payload.put(
+                    MARSHAL_TAB.get(RESTService.Y),
+                    args.getString(RESTService.Y));
         }
 
         return payload.toString();
@@ -82,7 +107,8 @@ public class MessageHandler {
         JsonReader reader = null;
         try {
             reader = new JsonReader(in);
-            unmarshalContact(reader, vals);
+            unmarshalSprite(reader, vals);
+
         }
         finally {
             if (null != reader) {
@@ -92,7 +118,7 @@ public class MessageHandler {
         return vals;
     }
 
-    public void unmarshalContact(JsonReader in, ContentValues vals)
+    public void unmarshalSprite(JsonReader in, ContentValues vals)
         throws IOException
     {
         in.beginObject();
