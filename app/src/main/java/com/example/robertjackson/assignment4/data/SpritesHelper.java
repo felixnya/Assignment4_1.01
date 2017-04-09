@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Robert Jackson
  * 4/8/2017
+ *
+ * This class is used as a helper for the sqlite storage system.
+ * it creates static final values to reference for assistance.
+ *
  */
 
 public class SpritesHelper extends SQLiteOpenHelper {
@@ -39,6 +43,7 @@ public class SpritesHelper extends SQLiteOpenHelper {
 
     /**
      * @param db
+     * On creation this will create a new table, if not already existing called sprite.
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
