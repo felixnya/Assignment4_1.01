@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Robert Jackson
+ * 4/8/2017
+ */
 
 public class SpritesHelper extends SQLiteOpenHelper {
     // sprite column data

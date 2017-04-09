@@ -6,6 +6,11 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+/**
+ * Robert Jackson
+ * 4/8/2017
+ */
+
 public class SpritesApplication extends Application
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "APP";
@@ -51,7 +56,9 @@ public class SpritesApplication extends Application
     }
 
     /**
-     *
+     * on create, entry point for Sprites application activity.
+     * instantiates kei api root to RESTfulContacts.URI. afterwards uses preferencemanagers
+     * get and register shared preference. using this current activity as the argument.
      */
     @Override
     public void onCreate() {
@@ -69,6 +76,8 @@ public class SpritesApplication extends Application
     /**
      * @param prefs
      * @param key
+     * On shared prefernce changed.
+     * all this simply does is sets api root uri to null.
      */
     @Override
     public synchronized void onSharedPreferenceChanged(
@@ -79,6 +88,9 @@ public class SpritesApplication extends Application
 
     /**
      * @return
+     * get api uri, this is a synchronized method. if apirooturi is null, it will parse it as
+     * its appropriate default value.
+     * Either way it will return api root uri value.
      */
     public Uri getApiUri() {
         synchronized (this) {

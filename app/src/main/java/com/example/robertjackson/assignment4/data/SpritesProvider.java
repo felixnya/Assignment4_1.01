@@ -16,6 +16,10 @@ import com.example.robertjackson.assignment4.svc.RESTService;
 import com.example.robertjackson.assignment4.util.ColumnMap;
 import com.example.robertjackson.assignment4.util.ProjectionMap;
 
+/**
+ * Robert Jackson
+ * 4/8/2017
+ */
 
 public class SpritesProvider extends ContentProvider {
     public static final String PK_CONSTRAINT = SpritesHelper.COL_ID + "=";

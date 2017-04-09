@@ -14,7 +14,10 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Robert Jackson
+ * 4/8/2017
+ */
 public class MessageHandler {
     // sprite columns
     public static final String TAG_ID = "id";

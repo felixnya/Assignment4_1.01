@@ -25,7 +25,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
 
-
+/**
+ * Robert Jackson
+ * 4/8/2017
+ */
 public class RESTService extends IntentService {
     public static final String HEADER_ENCODING = "Accept-Encoding";
     public static final String HEADER_USER_AGENT = "User-Agent";

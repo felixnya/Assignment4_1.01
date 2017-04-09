@@ -4,7 +4,10 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-
+/**
+ * Robert Jackson
+ * 4/8/2017
+ */
 public final class SpritesContract {
     public static final String TABLE = "sprite";
     public static final String AUTHORITY = "com.enterpriseandroid.restfulcontacts.SPRITES";
