@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 /**
  * Robert Jackson
  * 4/8/2017
- *
+ * <p>
  * This class is used as a static values storage device, so that each reference need not create
  * another copy of a string. This is to simply reference this class.
  */

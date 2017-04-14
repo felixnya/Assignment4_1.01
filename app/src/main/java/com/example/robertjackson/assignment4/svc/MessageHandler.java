@@ -60,9 +60,8 @@ public class MessageHandler {
     /**
      * @param args
      * @return
-     * @throws JSONException
-     * used as a strict selection process for inserting the sprites values inside of a payload.
-     * normally derived from a intent object.
+     * @throws JSONException used as a strict selection process for inserting the sprites values inside of a payload.
+     *                       normally derived from a intent object.
      */
     public String marshal(Bundle args) throws JSONException {
         JSONObject payload = new JSONObject();
@@ -115,8 +114,7 @@ public class MessageHandler {
      * @param in
      * @param vals
      * @return
-     * @throws IOException
-     * empties marshal
+     * @throws IOException empties marshal
      */
     public ContentValues unmarshal(Reader in, ContentValues vals)
             throws IOException {
@@ -139,8 +137,7 @@ public class MessageHandler {
     /**
      * @param in
      * @param vals
-     * @throws IOException
-     * empties sprite
+     * @throws IOException empties sprite
      */
     public void unmarshalSprite(JsonReader in, ContentValues vals)
             throws IOException {
