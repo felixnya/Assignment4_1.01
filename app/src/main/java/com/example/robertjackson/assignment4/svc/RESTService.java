@@ -48,7 +48,7 @@ public class RESTService extends IntentService {
     public static final String PANEL_WIDTH = "RESTService.PANEL_WIDTH";
     public static final String X = "RESTService.X";
     public static final String Y = "RESTService.Y";
-    private static final String TAG = "REST";
+    private static final String TAG = "http://";
     private static final String OP = "RESTService.OP";
     private String USER_AGENT;
 
@@ -398,6 +398,7 @@ public class RESTService extends IntentService {
 
         HttpURLConnection conn
                 = (HttpURLConnection) new URL(uri.toString()).openConnection();
+
         int code = HttpURLConnection.HTTP_UNAVAILABLE;
         try {
             conn.setReadTimeout(HTTP_READ_TIMEOUT);
@@ -417,20 +418,22 @@ public class RESTService extends IntentService {
                 conn.setDoOutput(true);
 
                 conn.connect();
+                // writer normally sync's with the rest of the stream
                 Writer out = new OutputStreamWriter(
                         new BufferedOutputStream(conn.getOutputStream()),
-                        "UTF-8");
+                        "UTF-8"); // standard type code language
                 out.write(payload);
                 out.flush();
             }
 
             code = conn.getResponseCode();
-
+            //handler
             if (null != hdlr) {
                 hdlr.handleResponse(new BufferedReader(
                         new InputStreamReader(conn.getInputStream())));
             }
         } finally {
+            // connection
             if (null != conn) {
                 try {
                     conn.disconnect();

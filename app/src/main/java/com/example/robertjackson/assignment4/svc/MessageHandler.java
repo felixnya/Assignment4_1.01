@@ -42,6 +42,7 @@ public class MessageHandler {
         m.put(RESTService.PANEL_HEIGHT, TAG_PANEL_HEIGHT);
         m.put(RESTService.PANEL_WIDTH, TAG_PANEL_WIDTH);
         m.put(RESTService.X, TAG_X);
+        m.put(RESTService.Y, TAG_Y);
         MARSHAL_TAB = m;
     }
 
@@ -54,6 +55,7 @@ public class MessageHandler {
         m.put(RESTService.PANEL_HEIGHT, TAG_PANEL_HEIGHT);
         m.put(RESTService.PANEL_WIDTH, TAG_PANEL_WIDTH);
         m.put(RESTService.X, TAG_X);
+        m.put(RESTService.Y, TAG_Y);
         UNMARSHAL_TAB = m;
     }
 
