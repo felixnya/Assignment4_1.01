@@ -49,13 +49,12 @@ public class SpritesActivity extends BaseActivity
     private SimpleCursorAdapter listAdapter;
 
     /**
-     * @param id
-     * @param args
-     * @return
      *
      * On create loader, this is used for when a sprite is created, more aless is used for creating
      * a table for the sqlite folder for when the program is first created.
-     *
+     * @param id
+     * @param args
+     * @return
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -69,11 +68,11 @@ public class SpritesActivity extends BaseActivity
     }
 
     /**
-     * @param loader
-     * @param cursor
      * On load finished, using swapCursor, is for implementing the listAdapter for this
      * activity. we could have used change cursor, as it closes after use, but we wanted it to
      * remain open for the activity lifetime.
+     * @param loader
+     * @param cursor
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
@@ -81,9 +80,9 @@ public class SpritesActivity extends BaseActivity
     }
 
     /**
-     * @param loader
      * On loader reset, in the event that the activity is reset, it will set the listadapter to
      * a swapcursor null value.
+     * @param loader
      */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -91,7 +90,6 @@ public class SpritesActivity extends BaseActivity
     }
 
     /**
-     * @param savedInstanceState
      *
      * on create, this is the starting point for sprites activty.
      * it starts off by creating a click listener for sprites_add, using the show details method
@@ -101,7 +99,7 @@ public class SpritesActivity extends BaseActivity
      * it creates it with the on creation sqlite portion, binds the view.
      * then afterwards it sets the view with a new adapter using the prior listAdapter, creates a
      * new click listener then initiates the loader.
-     *
+     * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +138,9 @@ public class SpritesActivity extends BaseActivity
     }
 
     /**
-     * @param pos
      * Show details, this creates a cursor using listAdapter's get item at int position.
      * using show details, it creates a uri path, then builds off of it.
+     * @param pos
      */
     void showDetails(int pos) {
         Cursor c = (Cursor) listAdapter.getItem(pos);
@@ -153,10 +151,10 @@ public class SpritesActivity extends BaseActivity
     }
 
     /**
-     * @param uri
      * show details, using a uri, it creates a new intent, setting the class to sprite detail activity
      * afterwards, it puts all needed data, and starts the activity. Note this is only starting
      * not ending current activty, nor asking for a response.
+     * @param uri
      */
     void showDetails(Uri uri) {
         if (BuildConfig.DEBUG) {
@@ -179,14 +177,14 @@ public class SpritesActivity extends BaseActivity
         }
 
         /**
-         * @param view
-         * @param cursor
-         * @param idx
-         * @return
          * Set View Value, this uses the view cursor and int for index. see's if the view
          * is not row_sprites_status, if it is, it will return a false. if it isnt.
          * it will set the status backround, using the cursor, with current index, and view.
          * then returns true.
+         * @param view
+         * @param cursor
+         * @param idx
+         * @return
          */
         @Override
         public boolean setViewValue(View view, Cursor cursor, int idx) {

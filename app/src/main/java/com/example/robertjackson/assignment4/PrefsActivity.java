@@ -14,10 +14,10 @@ import java.util.List;
 public class PrefsActivity extends PreferenceActivity {
 
     /**
-     * @param savedInstanceState
      * On create method, this is the first method run when starting this activity.
      * all this does is, if the build version is within a certain range, it adds preferences from
      * the xml folder. Specifically the pref xml file.
+     * @param savedInstanceState
      */
     @SuppressWarnings("deprecation")
     @Override
@@ -29,9 +29,9 @@ public class PrefsActivity extends PreferenceActivity {
     }
 
     /**
-     * @param target
      * On Build headers, this loads headers from the xml pre_headers file, using a pre existing
      * header list.
+     * @param target
      */
     @Override
     public void onBuildHeaders(List<Header> target) {

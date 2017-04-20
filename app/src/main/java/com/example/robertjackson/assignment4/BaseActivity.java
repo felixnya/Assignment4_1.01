@@ -32,10 +32,10 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * @param status
-     * @param view
      * Used to set current activities background. it tests to see if color does not equal zero
      * if it does, it sets the color to color. else it turns it into black.
+     * @param status
+     * @param view
      */
     protected static void setStatusBackground(int status, View view) {
         int color = STATUS_COLOR_MAP.get(status);
@@ -43,11 +43,11 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * @param menu
-     * @return
      * On create options menu, is a method used to include the menu for the current activity.
      * All this does is inflate the toolbar at the top of the screen with the menu layout
      * then returns that it has accomplished such.
+     * @param menu
+     * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,11 +57,11 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * @param item
-     * @return
      * On options item selected, this is the logic behind the menu selection options.
      * Such as, if i press on item preferences icon, it will start a new activity.
      * otherwise it will say it is unrecognized, which should in all fairness, never activate.
+     * @param item
+     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -118,8 +118,9 @@ public class SpritesProvider extends ContentProvider {
     private volatile SpritesHelper helper;
 
     /**
-     * @return on create
+     *  on create
      * standard entry location for this activity.
+     * @return boolean
      */
     @Override
     public boolean onCreate() {
@@ -131,9 +132,11 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
-     * @param uri
-     * @return get type
+     * get type
      * returns sprite directory or item, this is simply a static string from sprites contract.
+     * @param uri
+     * @return String
+     *
      */
     @Override
     public String getType(Uri uri) {
@@ -148,10 +151,12 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * Insert
+     * inserts a uri. not currently implemented.
      * @param uri
      * @param vals
-     * @return insert
-     * inserts a uri. not currently implemented.
+     * @return Uri
+     *
      */
     @Override
     public Uri insert(Uri uri, ContentValues vals) {
@@ -178,11 +183,12 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * updates  a sprite at uri
      * @param uri
      * @param vals
      * @param sel
      * @param sArgs
-     * @return updates  a sprite at uri
+     * @return int
      */
     @Override
     public int update(Uri uri, ContentValues vals, String sel, String[] sArgs) {
@@ -222,10 +228,11 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * Deletes a sprite
      * @param uri
      * @param sel
      * @param sArgs
-     * @return deletes a sprite
+     * @return int
      */
     @Override
     public int delete(Uri uri, String sel, String[] sArgs) {
@@ -269,12 +276,13 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * builds upon a query for local sqlite
      * @param uri
      * @param proj
      * @param sel
      * @param selArgs
      * @param ord
-     * @return builds upon a query for local sqlite
+     * @return Cursor
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @SuppressWarnings("fallthrough")
@@ -322,9 +330,10 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * inserts using sqlite database
      * @param uri
      * @param vals
-     * @return inserts using sqlite database
+     * @return Uri
      */
     public Uri localInsert(Uri uri, ContentValues vals) {
         if (BuildConfig.DEBUG) {
@@ -384,10 +393,11 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * deletes local sqlite sprite
      * @param uri
      * @param sel
      * @param sArgs
-     * @return deletes local sqlite sprite
+     * @return int
      */
     public int localDelete(Uri uri, String sel, String[] sArgs) {
         if (BuildConfig.DEBUG) {
@@ -413,12 +423,13 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * uses local sqlite query then returns the cursor for the sprite.
      * @param qb
      * @param proj
      * @param sel
      * @param selArgs
      * @param ord
-     * @return uses local sqlite query then returns the cursor for the sprite.
+     * @return Cursor
      */
     public Cursor localQuery(
             SQLiteQueryBuilder qb,
@@ -437,8 +448,9 @@ public class SpritesProvider extends ContentProvider {
     }
 
     /**
+     * returns a remote id of the sprite object.
      * @param uri
-     * @return returns a remote id of the sprite object.
+     * @return String
      */
     // !!! Race condition
     // If you try to delete or update something that has not yet

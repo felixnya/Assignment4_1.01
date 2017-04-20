@@ -57,10 +57,10 @@ public class RESTService extends IntentService {
     }
 
     /**
+     * used to insert a sprite into the database.
      * @param ctxt
      * @param vals
      * @return insert
-     * used to insert a sprite into the database.
      */
     public static String insert(Context ctxt, ContentValues vals) {
         Intent intent = getIntent(ctxt, RESTService.Op.CREATE);
@@ -73,10 +73,10 @@ public class RESTService extends IntentService {
     }
 
     /**
+     * used to delete a sprite from the database.
      * @param ctxt
      * @param id
      * @return delete
-     * used to delete a sprite from the database.
      */
     public static String delete(Context ctxt, String id) {
         if (null == id) {
@@ -93,12 +93,12 @@ public class RESTService extends IntentService {
     }
 
     /**
+     * used to access the update method via marshal request.
+     * used as a narrow transaction for selection.
      * @param ctxt
      * @param id
      * @param vals
      * @return update
-     * used to access the update method via marshal request.
-     * used as a narrow transaction for selection.
      */
     public static String update(Context ctxt, String id, ContentValues vals) {
         if (null == id) {
@@ -116,10 +116,10 @@ public class RESTService extends IntentService {
     }
 
     /**
+     * standard accessor method for intent.
      * @param ctxt
      * @param op
      * @return get intent
-     * standard accessor method for intent.
      */
     private static Intent getIntent(Context ctxt, Op op) {
         Intent intent = new Intent(ctxt, RESTService.class);
@@ -133,10 +133,12 @@ public class RESTService extends IntentService {
     }
 
     /**
+     *
+     * marshal request
+     * used to take current content values and an intent to put together a sprite
+     * inside of an intent, this is normally used later to place this inside a database.
      * @param vals
-     * @param intent marshal request
-     *               used to take current content values and an intent to put together a sprite
-     *               inside of an intent, this is normally used later to place this inside a database.
+     * @param intent
      */
     // the server always wants all values
     private static void marshalRequest(ContentValues vals, Intent intent) {
@@ -186,8 +188,9 @@ public class RESTService extends IntentService {
     }
 
     /**
-     * @param intent on handle intent
-     *               used to handle intent being thrown and gathers the extra as a bundle.
+     * on handle intent
+     * used to handle intent being thrown and gathers the extra as a bundle.
+     * @param intent
      */
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -196,8 +199,9 @@ public class RESTService extends IntentService {
     }
 
     /**
-     * @param args send request
-     *             this is a switch statement using the bundle arguments to select an operation out of a list.
+     * send request
+     * this is a switch statement using the bundle arguments to select an operation out of a list.
+     * @param args
      */
     private void sendRequest(Bundle args) {
         int op = 0;
@@ -224,8 +228,10 @@ public class RESTService extends IntentService {
     }
 
     /**
-     * @param args create sprite
-     *             creates a new sprite and adds it to the server's database
+     *
+     * create sprite
+     * creates a new sprite and adds it to the server's database
+     * @param args
      */
     private void createSprite(Bundle args) {
         if (args.containsKey(ID)) {
@@ -258,8 +264,10 @@ public class RESTService extends IntentService {
     }
 
     /**
-     * @param args update sprite
-     *             Updates current sprite with new values
+     *
+     * update sprite
+     * Updates current sprite with new values
+     * @param args
      */
     private void updateSprite(Bundle args) {
         if (!args.containsKey(ID)) {
@@ -295,8 +303,9 @@ public class RESTService extends IntentService {
     }
 
     /**
-     * @param args delete sprite
-     *             Used to delete a selected sprite from the server/arraylist
+     * delete sprite
+     * Used to delete a selected sprite from the server/arraylist
+     * @param args
      */
     private void deleteSprite(Bundle args) {
         if (!args.containsKey(ID)) {
@@ -326,9 +335,10 @@ public class RESTService extends IntentService {
     }
 
     /**
+     *  cleanup
+     *  it is used to sync constraints with sprites provider.
      * @param args
-     * @param vals cleanup
-     *             it is used to sync constraints with sprites provider.
+     * @param vals
      */
     private void cleanup(Bundle args, ContentValues vals) {
         if (null == vals) {
@@ -362,9 +372,10 @@ public class RESTService extends IntentService {
     }
 
     /**
+     * Check id
+     * used as an error checking for sprite values, in terms of their id vs the server
      * @param args
-     * @param vals Check id
-     *             used as an error checking for sprite values, in terms of their id vs the server
+     * @param vals
      */
     private void checkId(Bundle args, ContentValues vals) {
         String id = args.getString(ID);

@@ -74,10 +74,10 @@ public class SpritesApplication extends Application
     }
 
     /**
-     * @param prefs
-     * @param key
      * On shared prefernce changed.
      * all this simply does is sets api root uri to null.
+     * @param prefs
+     * @param key
      */
     @Override
     public synchronized void onSharedPreferenceChanged(
@@ -87,10 +87,11 @@ public class SpritesApplication extends Application
     }
 
     /**
-     * @return
+     *
      * get api uri, this is a synchronized method. if apirooturi is null, it will parse it as
      * its appropriate default value.
      * Either way it will return api root uri value.
+     * @return
      */
     public Uri getApiUri() {
         synchronized (this) {

@@ -59,11 +59,11 @@ public class SpritesDetailActivity extends BaseActivity
     private Uri contactUri;
 
     /**
+     * On create loader, this is an sqlite helper. when the application is first launched.
+     * it will create the loader with these values.
      * @param id
      * @param args
      * @return
-     * On create loader, this is an sqlite helper. when the application is first launched.
-     * it will create the loader with these values.
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -71,10 +71,10 @@ public class SpritesDetailActivity extends BaseActivity
     }
 
     /**
-     * @param loader
-     * @param cursor
      * On load finished, after the current load has been finished, it will populate the view
      * that is list view, with the values at the cursor location.
+     * @param loader
+     * @param cursor
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
@@ -82,20 +82,20 @@ public class SpritesDetailActivity extends BaseActivity
     }
 
     /**
-     * @param loader
      * On loader reset, nothing at this point and time.
+     * @param loader
      */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
     /**
-     * @param state
      * On create, the entry point of sprites detail activty. inquires about state, uri, and contacturi.
      * if any are null/not null, it will set these values.
      *
      * It sets the current view, with activity sprite details. then instantiates several variables.
      * creates two click listeners, these being the buttons. for launching update and delete.
+     * @param state
      */
     @Override
     protected void onCreate(Bundle state) {
@@ -143,8 +143,8 @@ public class SpritesDetailActivity extends BaseActivity
     }
 
     /**
-     * @param state
      * on save instance state, if contact uri is not null, it puts a string in state bundle.
+     * @param state
      */
     @Override
     protected void onSaveInstanceState(Bundle state) {
@@ -154,7 +154,7 @@ public class SpritesDetailActivity extends BaseActivity
     }
 
     /**
-     *delete, if contacturi is not null, it instantiates a new instance of delete sprite.
+     * delete, if contacturi is not null, it instantiates a new instance of delete sprite.
      * using get content resolver, executing with contact uri, then launches the gotosprites method.
      */
     void delete() {
@@ -184,10 +184,10 @@ public class SpritesDetailActivity extends BaseActivity
     }
 
     /**
-     * @param c
      * populate view.
      * sets background, then populates the view by extracting the fields current at this point
      * by the cursor variable.
+     * @param c
      */
     private void populateView(Cursor c) {
         if (!c.moveToNext()) {
@@ -236,21 +236,21 @@ public class SpritesDetailActivity extends BaseActivity
     }
 
     /**
+     * get string, returns the string at cursor provided.
      * @param c
      * @param col
      * @return
-     * get string, returns the string at cursor provided.
      */
     private String getString(Cursor c, String col) {
         return c.getString(c.getColumnIndex(col));
     }
 
     /**
+     * add string, used to add a string to a certain value that being to content values.
      * @param view
      * @param oldVal
      * @param vals
      * @param col
-     * add string, used to add a string to a certain value that being to content values.
      */
     private void addString(
             TextView view,
@@ -276,11 +276,11 @@ public class SpritesDetailActivity extends BaseActivity
         }
 
         /**
-         * @param args
-         * @return
          * do in backgroun.
          * creates an array of uri, if it isnt null, it will use resolver and update.
          * otherwise if it is null it will insert a sprite contact. then retun null.
+         * @param args
+         * @return
          */
         @Override
         protected Void doInBackground(Uri... args) {
